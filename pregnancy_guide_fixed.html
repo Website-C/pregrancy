@@ -1,0 +1,570 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#f2a0b0;--rose-deep:#d4637a;--rose-pale:#fdf0f3;
+  --sage:#a8c5b0;--sage-deep:#5a8a6a;--sage-pale:#f0f7f2;
+  --gold:#e8c87a;--gold-deep:#b8922a;--cream:#fdfaf5;
+  --text:#3a2d35;--text-soft:#7a6570;--text-hint:#b5a0ab;
+  --white:#ffffff;--border:#ecdde2;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text)}
+.app{max-width:480px;margin:0 auto;position:relative;overflow:hidden}
+.screen{display:none;flex-direction:column;min-height:100vh;padding:24px 20px 90px}
+.screen.active{display:flex}
+#splash{background:linear-gradient(160deg,#fdf0f3 0%,#f0f7f2 50%,#fdfaf5 100%);justify-content:center;align-items:center;text-align:center;padding:40px 20px}
+.splash-flower{font-size:64px;margin-bottom:16px;animation:bloom 1.5s ease-out}
+@keyframes bloom{0%{transform:scale(0.4);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.app-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--rose-deep);line-height:1.2}
+.app-subtitle{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--text-soft);margin:8px 0 28px}
+.tagline{font-size:13px;color:var(--text-hint);margin-bottom:40px;line-height:1.7}
+.btn-primary{display:block;width:100%;background:linear-gradient(135deg,var(--rose-deep),#c0506a);color:white;border:none;border-radius:50px;padding:16px 40px;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;letter-spacing:0.3px;transition:all 0.2s;box-shadow:0 4px 20px rgba(212,99,122,0.3);text-align:center;margin-bottom:12px}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,99,122,0.4)}
+.btn-secondary{display:block;width:100%;background:transparent;color:var(--rose-deep);border:1.5px solid var(--rose);border-radius:50px;padding:14px 40px;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:center}
+.btn-secondary:hover{background:var(--rose-pale)}
+.screen-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.back-btn{background:var(--rose-pale);border:none;cursor:pointer;color:var(--rose-deep);font-size:18px;padding:8px 12px;border-radius:10px;line-height:1;font-family:'DM Sans',sans-serif}
+.screen-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--text)}
+.screen-subtitle{font-size:13px;color:var(--text-hint);margin-bottom:20px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:11px;font-weight:500;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;display:block}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:12px 16px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);outline:none;transition:border-color 0.2s}
+.form-input:focus{border-color:var(--rose)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.section-card{background:var(--rose-pale);border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid rgba(242,160,176,0.3)}
+.section-card-title{font-size:11px;font-weight:500;color:var(--rose-deep);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.quiz-progress{height:5px;background:var(--border);border-radius:3px;margin-bottom:28px;overflow:hidden}
+.quiz-bar{height:100%;background:linear-gradient(90deg,var(--rose),var(--sage));border-radius:3px;transition:width 0.4s ease}
+.quiz-q-num{font-size:12px;color:var(--text-hint);margin-bottom:8px;font-weight:500;letter-spacing:0.5px}
+.quiz-question{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:24px}
+.quiz-options{display:flex;flex-direction:column;gap:10px}
+.quiz-option{border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:12px;background:var(--white)}
+.quiz-option:hover{border-color:var(--rose);background:var(--rose-pale)}
+.quiz-option.selected{border-color:var(--rose-deep);background:var(--rose-pale)}
+.quiz-option-icon{font-size:22px;flex-shrink:0}
+.quiz-option-text{font-size:14px;color:var(--text);line-height:1.4}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+.btn-ghost{background:none;border:none;color:var(--text-soft);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:8px}
+#home{padding:0 0 90px}
+.home-header{background:linear-gradient(160deg,#fdf0f3,#f0f7f2);padding:28px 20px 24px;position:relative;overflow:hidden}
+.home-header::after{content:'🌸';position:absolute;right:-10px;top:10px;font-size:80px;opacity:0.12;pointer-events:none}
+.greeting{font-size:13px;color:var(--text-soft);margin-bottom:2px}
+.mama-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--text)}
+.week-badge{display:inline-flex;align-items:center;gap:6px;background:white;border:1px solid var(--rose);border-radius:50px;padding:6px 14px;margin-top:10px;font-size:12px;font-weight:500;color:var(--rose-deep)}
+.health-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:16px 20px}
+.h-card{background:white;border-radius:14px;padding:12px;text-align:center;border:1px solid var(--border)}
+.h-val{font-size:18px;font-weight:500;color:var(--text);font-family:'Cormorant Garamond',serif}
+.h-lbl{font-size:10px;color:var(--text-hint);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px}
+.h-status{font-size:10px;margin-top:4px;font-weight:500}
+.h-status.good{color:var(--sage-deep)}
+.h-status.warn{color:var(--gold-deep)}
+.sec-head{padding:8px 20px;display:flex;justify-content:space-between;align-items:center}
+.sec-head-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--text)}
+.food-scroll{display:flex;gap:12px;padding:0 20px 4px;overflow-x:auto;scrollbar-width:none}
+.food-scroll::-webkit-scrollbar{display:none}
+.food-card{min-width:140px;background:white;border-radius:16px;padding:14px;border:1px solid var(--border);flex-shrink:0}
+.food-emoji{font-size:28px;margin-bottom:8px}
+.food-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px}
+.food-detail{font-size:11px;color:var(--text-hint)}
+.food-budget{font-size:10px;color:var(--sage-deep);margin-top:4px;font-weight:500}
+.exercise-card{margin:0 20px 10px;background:white;border-radius:16px;padding:16px;border:1px solid var(--border);display:flex;gap:14px;align-items:flex-start}
+.ex-icon{font-size:28px;flex-shrink:0}
+.ex-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.ex-desc{font-size:12px;color:var(--text-soft);line-height:1.5;margin-bottom:6px}
+.ex-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ex-tag{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:500}
+.ex-tag.safe{background:#f0f7f2;color:var(--sage-deep)}
+.ex-tag.trim{background:#fdf0f3;color:var(--rose-deep)}
+.ex-tag.dur{background:#fdfaf5;color:var(--gold-deep)}
+.reminder-card{margin:0 20px 16px;background:linear-gradient(135deg,#fdf0f3,#f0f7f2);border-radius:16px;padding:16px;border:1px solid rgba(242,160,176,0.4);display:flex;gap:12px;align-items:center}
+.reminder-btn{background:var(--rose-deep);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;border-top:1px solid var(--border);display:flex;padding:8px 0 12px;z-index:999}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px}
+.nav-icon{font-size:20px}
+.nav-label{font-size:10px;color:var(--text-hint);font-weight:500}
+.nav-item.active .nav-label{color:var(--rose-deep)}
+#chat-screen,#reports-screen,#profile-screen{padding:0 0 90px}
+.chat-header{background:white;padding:20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.ai-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--sage));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ai-name{font-weight:500;font-size:14px;color:var(--text)}
+.ai-status{font-size:11px;color:var(--sage-deep)}
+.chat-messages{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:55vh}
+.msg{max-width:82%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.6}
+.msg-ai{background:white;border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start}
+.msg-user{background:linear-gradient(135deg,var(--rose-deep),#c0506a);color:white;border-bottom-right-radius:4px;align-self:flex-end}
+.typing-dots{display:flex;gap:4px;padding:4px}
+.typing-dots span{width:7px;height:7px;border-radius:50%;background:var(--text-hint);animation:td 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes td{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-input-bar{position:fixed;bottom:62px;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;z-index:998}
+.chat-input{flex:1;border:1.5px solid var(--border);border-radius:20px;padding:10px 16px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;color:var(--text);background:var(--cream)}
+.chat-input:focus{border-color:var(--rose)}
+.send-btn{background:var(--rose-deep);color:white;border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.quick-chips{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;scrollbar-width:none;background:white;border-bottom:1px solid var(--border)}
+.quick-chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;background:var(--rose-pale);border:1px solid rgba(242,160,176,0.5);color:var(--rose-deep);border-radius:20px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.chip:hover{background:var(--rose)}
+.reports-header{background:white;padding:20px;border-bottom:1px solid var(--border)}
+.upload-zone{margin:20px;background:white;border:2px dashed var(--rose);border-radius:16px;padding:32px 20px;text-align:center;cursor:pointer}
+.upload-zone:hover{background:var(--rose-pale)}
+.upload-icon{font-size:36px;margin-bottom:12px}
+.upload-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+.upload-sub{font-size:12px;color:var(--text-hint)}
+.report-item{margin:0 20px 10px;background:white;border-radius:14px;padding:14px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.report-icon{font-size:24px}
+.report-info{flex:1}
+.report-name{font-size:13px;font-weight:500;color:var(--text)}
+.report-date{font-size:11px;color:var(--text-hint)}
+.report-status{font-size:10px;padding:3px 8px;border-radius:10px;font-weight:500}
+.rs-ok{background:#f0f7f2;color:var(--sage-deep)}
+.rs-pend{background:#fdfaf5;color:var(--gold-deep)}
+.profile-hero{background:linear-gradient(160deg,#fdf0f3,#f0f7f2);padding:28px 20px 24px;text-align:center}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--sage));margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid white}
+.pname{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--text)}
+.pweek{font-size:13px;color:var(--text-soft);margin-top:4px}
+.persona-badge{display:inline-flex;align-items:center;gap:6px;background:white;border:1px solid var(--rose);border-radius:20px;padding:5px 12px;margin-top:10px;font-size:12px;color:var(--rose-deep);font-weight:500}
+.prof-section{margin:16px 20px 0}
+.prof-section-title{font-size:11px;font-weight:500;color:var(--text-hint);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px}
+.prof-row{background:white;border-radius:12px;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;border:1px solid var(--border)}
+.prof-row-label{font-size:13px;color:var(--text-soft)}
+.prof-row-val{font-size:13px;font-weight:500;color:var(--text)}
+.storage-note{margin:16px 20px 0;background:var(--sage-pale);border-radius:12px;padding:12px 14px;display:flex;gap:10px;border:1px solid rgba(168,197,176,0.5)}
+.storage-text{font-size:12px;color:var(--sage-deep);line-height:1.5}
+.fade-in{animation:fi 0.35s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important}
+</style>
+
+<div class="app">
+
+<!-- SPLASH -->
+<div id="splash" class="screen active">
+  <div class="splash-flower">🌸</div>
+  <div class="app-title">Pregnancy Overcome<br>Guide</div>
+  <div class="app-subtitle">Your gentle companion through every stage</div>
+  <p class="tagline">Personalised food plans, exercises, health insights,<br>and a caring AI — just for you and your baby.</p>
+  <button class="btn-primary" id="btn-signup">✨ Begin Your Journey</button>
+  <button class="btn-secondary" id="btn-signin">Sign In</button>
+</div>
+
+<!-- SIGNUP -->
+<div id="signup" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="signup-back">← Back</button>
+    <div class="screen-title">Tell Us About You</div>
+  </div>
+  <p class="screen-subtitle">All details are saved privately on your device only 🔒</p>
+  <div class="section-card">
+    <div class="section-card-title">👤 About You</div>
+    <div class="form-group">
+      <label class="form-label">Full Name</label>
+      <input class="form-input" id="inp-name" type="text" placeholder="Your name">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Age</label>
+        <input class="form-input" id="inp-age" type="number" placeholder="25">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Blood Type</label>
+        <select class="form-input" id="inp-blood">
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="section-card">
+    <div class="section-card-title">📏 Body Details</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Height (cm)</label>
+        <input class="form-input" id="inp-height" type="number" placeholder="160">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Weight (kg)</label>
+        <input class="form-input" id="inp-weight" type="number" placeholder="65">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Pre-pregnancy Weight</label>
+        <input class="form-input" id="inp-preweight" type="number" placeholder="58">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Weeks Pregnant</label>
+        <input class="form-input" id="inp-weeks" type="number" placeholder="20">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Medical Conditions</label>
+      <input class="form-input" id="inp-conditions" type="text" placeholder="e.g. Gestational diabetes, or none">
+    </div>
+  </div>
+  <div class="section-card">
+    <div class="section-card-title">💰 Financial Details</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Weekly Food Budget (LKR)</label>
+        <input class="form-input" id="inp-food" type="number" placeholder="3000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Monthly Medicine (LKR)</label>
+        <input class="form-input" id="inp-med" type="number" placeholder="5000">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Checkup Reminder</label>
+      <select class="form-input" id="inp-reminder">
+        <option>Weekly</option><option>Bi-Monthly</option><option selected>Monthly</option>
+      </select>
+    </div>
+  </div>
+  <button class="btn-primary" id="btn-to-quiz">Continue to Personality Quiz →</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="quiz-back">← Back</button>
+    <div class="screen-title">Know Yourself</div>
+  </div>
+  <div class="quiz-progress"><div class="quiz-bar" id="quiz-bar" style="width:0%"></div></div>
+  <div id="quiz-body"></div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen">
+  <div class="home-header">
+    <div class="greeting">Good morning, mama 🌸</div>
+    <div class="mama-name" id="d-name">Sarah</div>
+    <div class="week-badge">🌱 Week <span id="d-week">20</span> · 2nd Trimester</div>
+  </div>
+  <div class="health-strip">
+    <div class="h-card">
+      <div class="h-val" id="d-bmi">24.2</div>
+      <div class="h-lbl">BMI</div>
+      <div class="h-status good" id="d-bmi-s">Normal ✓</div>
+    </div>
+    <div class="h-card">
+      <div class="h-val" id="d-gain">7.0 kg</div>
+      <div class="h-lbl">Weight Gain</div>
+      <div class="h-status good">On track ✓</div>
+    </div>
+    <div class="h-card">
+      <div class="h-val" id="d-budget">3,000</div>
+      <div class="h-lbl">LKR / week</div>
+      <div class="h-status warn">Food budget</div>
+    </div>
+  </div>
+  <div class="sec-head"><div class="sec-head-title">Today's Food Plan 🥗</div></div>
+  <div class="food-scroll">
+    <div class="food-card"><div class="food-emoji">🥚</div><div class="food-name">Breakfast</div><div class="food-detail">2 eggs + whole grain toast + milk</div><div class="food-budget">~LKR 180</div></div>
+    <div class="food-card"><div class="food-emoji">🍛</div><div class="food-name">Lunch</div><div class="food-detail">Rice + dhal + spinach + fish</div><div class="food-budget">~LKR 350</div></div>
+    <div class="food-card"><div class="food-emoji">🍌</div><div class="food-name">Snack</div><div class="food-detail">Banana + nuts + coconut water</div><div class="food-budget">~LKR 90</div></div>
+    <div class="food-card"><div class="food-emoji">🍲</div><div class="food-name">Dinner</div><div class="food-detail">Vegetable curry + brown rice</div><div class="food-budget">~LKR 280</div></div>
+  </div>
+  <div class="sec-head" style="margin-top:16px"><div class="sec-head-title">Today's Exercises 🤸</div></div>
+  <div class="exercise-card"><div class="ex-icon">🚶</div><div><div class="ex-name">Gentle Morning Walk</div><div class="ex-desc">A light 15-min walk. Keep posture upright, avoid uneven surfaces.</div><div class="ex-tags"><span class="ex-tag safe">Safe T2</span><span class="ex-tag dur">15 mins</span></div></div></div>
+  <div class="exercise-card"><div class="ex-icon">🧘</div><div><div class="ex-name">Prenatal Yoga — Cat-Cow</div><div class="ex-desc">Hands and knees, alternate arching and rounding your back gently. Eases back pain.</div><div class="ex-tags"><span class="ex-tag safe">Back relief</span><span class="ex-tag trim">Low impact</span><span class="ex-tag dur">10 mins</span></div></div></div>
+  <div class="exercise-card"><div class="ex-icon">💪</div><div><div class="ex-name">Kegel Exercises</div><div class="ex-desc">Tighten pelvic floor muscles 5 sec, release, repeat 10 times. Prepares for labour.</div><div class="ex-tags"><span class="ex-tag safe">All trimesters</span><span class="ex-tag dur">5 mins</span></div></div></div>
+  <div class="sec-head" style="margin-top:8px"><div class="sec-head-title">Next Checkup 📅</div></div>
+  <div class="reminder-card">
+    <div style="font-size:28px">🏥</div>
+    <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--text)">Antenatal Checkup Due</div><div style="font-size:12px;color:var(--text-soft)" id="d-reminder">Monthly reminder set</div></div>
+    <button class="reminder-btn">Set Alert</button>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div id="chat-screen" class="screen">
+  <div class="chat-header">
+    <div class="ai-avatar">🌸</div>
+    <div><div class="ai-name">Blossom AI</div><div class="ai-status">Your pregnancy companion · always here</div></div>
+  </div>
+  <div class="quick-chips">
+    <div class="chip" id="chip1">Foods to avoid 🚫</div>
+    <div class="chip" id="chip2">Back pain help 💆</div>
+    <div class="chip" id="chip3">Weight check ⚖️</div>
+    <div class="chip" id="chip4">Normal symptoms 🩺</div>
+  </div>
+  <div class="chat-messages" id="chat-msgs">
+    <div class="msg msg-ai">Hello, mama! 💕 I'm Blossom, your personal pregnancy companion. I know your journey — your week, your body, and your goals. Ask me anything, any time.</div>
+  </div>
+  <div class="chat-input-bar">
+    <input class="chat-input" id="chat-inp" type="text" placeholder="Ask Blossom anything…">
+    <button class="send-btn" id="send-btn">↑</button>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div id="reports-screen" class="screen">
+  <div class="reports-header">
+    <div class="screen-title">Medical Reports 📋</div>
+    <p style="font-size:13px;color:var(--text-soft);margin-top:4px">Upload reports so Blossom AI can understand your and your baby's condition</p>
+  </div>
+  <div class="upload-zone" id="upload-zone">
+    <div class="upload-icon">📄</div>
+    <div class="upload-title">Tap to Upload a Report</div>
+    <div class="upload-sub">Ultrasound, blood test, urine — any format</div>
+  </div>
+  <div id="report-list">
+    <div class="report-item"><div class="report-icon">🔬</div><div class="report-info"><div class="report-name">Blood Test — Week 16</div><div class="report-date">Uploaded 3 days ago</div></div><div class="report-status rs-ok">Analyzed ✓</div></div>
+    <div class="report-item"><div class="report-icon">🩺</div><div class="report-info"><div class="report-name">Ultrasound Scan — Week 12</div><div class="report-date">Uploaded 2 weeks ago</div></div><div class="report-status rs-ok">Analyzed ✓</div></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile-screen" class="screen">
+  <div class="profile-hero">
+    <div class="profile-avatar">🤰</div>
+    <div class="pname" id="p-name">Sarah</div>
+    <div class="pweek" id="p-week">Week 20 · 2nd Trimester</div>
+    <div class="persona-badge" id="p-persona">✨ Nurturing Soul</div>
+  </div>
+  <div class="storage-note">
+    <div style="font-size:16px;flex-shrink:0">🔒</div>
+    <div class="storage-text">All your data is saved privately on this device only. Nothing is shared externally.</div>
+  </div>
+  <div class="prof-section">
+    <div class="prof-section-title">Body Details</div>
+    <div class="prof-row"><span class="prof-row-label">Height</span><span class="prof-row-val" id="p-height">160 cm</span></div>
+    <div class="prof-row"><span class="prof-row-label">Current Weight</span><span class="prof-row-val" id="p-weight">65 kg</span></div>
+    <div class="prof-row"><span class="prof-row-label">Pre-pregnancy Weight</span><span class="prof-row-val" id="p-preweight">58 kg</span></div>
+    <div class="prof-row"><span class="prof-row-label">BMI</span><span class="prof-row-val" id="p-bmi">24.2 — Normal</span></div>
+    <div class="prof-row"><span class="prof-row-label">Blood Type</span><span class="prof-row-val" id="p-blood">O+</span></div>
+  </div>
+  <div class="prof-section">
+    <div class="prof-section-title">Preferences & Budget</div>
+    <div class="prof-row"><span class="prof-row-label">Checkup Reminders</span><span class="prof-row-val" id="p-reminder">Monthly</span></div>
+    <div class="prof-row"><span class="prof-row-label">Weekly Food Budget</span><span class="prof-row-val" id="p-food">LKR 3,000</span></div>
+    <div class="prof-row"><span class="prof-row-label">Medicine Budget</span><span class="prof-row-val" id="p-med">LKR 5,000</span></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav hidden" id="bottom-nav">
+  <div class="nav-item active" id="nav-home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+  <div class="nav-item" id="nav-chat"><div class="nav-icon">💬</div><div class="nav-label">Blossom</div></div>
+  <div class="nav-item" id="nav-reports"><div class="nav-icon">📋</div><div class="nav-label">Reports</div></div>
+  <div class="nav-item" id="nav-profile"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></div>
+</nav>
+
+</div>
+
+<script>
+var ud = {};
+var PERSONAS = ["Intuitive Nurturer","Grounded Planner","Radiant Free Spirit","Mindful Warrior","Gentle Explorer","Serene Mama"];
+var QUIZ = [
+  {q:"When you feel overwhelmed, what helps you most?",opts:[{i:"📖",t:"Reading or journaling quietly"},{i:"🤝",t:"Talking to someone I trust"},{i:"🎵",t:"Music, movement, or creativity"},{i:"🌿",t:"Being in nature or meditating"}]},
+  {q:"How do you prefer to receive guidance and tips?",opts:[{i:"📋",t:"Step-by-step lists and schedules"},{i:"💬",t:"Friendly, conversational advice"},{i:"🎯",t:"Short, direct key points only"},{i:"✨",t:"Inspirational and encouraging words"}]},
+  {q:"What matters most to you right now?",opts:[{i:"🍎",t:"Eating perfectly for my baby"},{i:"💪",t:"Staying strong and active"},{i:"😌",t:"Staying calm and stress-free"},{i:"💰",t:"Managing costs wisely"}]},
+  {q:"How would your close friends describe you?",opts:[{i:"🦋",t:"Creative and expressive"},{i:"🌻",t:"Warm and nurturing to everyone"},{i:"🔬",t:"Analytical and detail-oriented"},{i:"⚡",t:"Energetic and spontaneous"}]},
+  {q:"When you imagine holding your baby, you feel…",opts:[{i:"😭",t:"Completely overwhelmed with love"},{i:"🤩",t:"Excited and ready for adventure"},{i:"🙏",t:"Deeply grateful and peaceful"},{i:"💭",t:"Wondering about the future"}]},
+  {q:"What kind of pregnancy experience do you want?",opts:[{i:"🌸",t:"Gentle, natural and mindful"},{i:"🏥",t:"Medically informed and safe"},{i:"🎉",t:"Joyful, social and celebrated"},{i:"🧘",t:"Balanced, structured and calm"}]}
+];
+var qIdx = 0, qAnswers = [];
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  var mainScreens = ['home','chat-screen','reports-screen','profile-screen'];
+  var nav = document.getElementById('bottom-nav');
+  if (mainScreens.indexOf(id) >= 0) { nav.classList.remove('hidden'); }
+  else { nav.classList.add('hidden'); }
+}
+
+function collectSignup() {
+  ud.name = document.getElementById('inp-name').value || 'Mama';
+  ud.age = document.getElementById('inp-age').value || '28';
+  ud.blood = document.getElementById('inp-blood').value || 'O+';
+  ud.height = document.getElementById('inp-height').value || '160';
+  ud.weight = document.getElementById('inp-weight').value || '65';
+  ud.preweight = document.getElementById('inp-preweight').value || '58';
+  ud.weeks = document.getElementById('inp-weeks').value || '20';
+  ud.conditions = document.getElementById('inp-conditions').value || 'None';
+  ud.food = document.getElementById('inp-food').value || '3000';
+  ud.med = document.getElementById('inp-med').value || '5000';
+  ud.reminder = document.getElementById('inp-reminder').value || 'Monthly';
+}
+
+function renderQuiz() {
+  var pct = (qIdx / QUIZ.length) * 100;
+  document.getElementById('quiz-bar').style.width = pct + '%';
+  var q = QUIZ[qIdx];
+  var html = '<div class="quiz-q-num fade-in">Question ' + (qIdx+1) + ' of ' + QUIZ.length + '</div>';
+  html += '<div class="quiz-question fade-in">' + q.q + '</div>';
+  html += '<div class="quiz-options fade-in">';
+  q.opts.forEach(function(o, i) {
+    html += '<div class="quiz-option" data-idx="' + i + '" style="cursor:pointer"><span class="quiz-option-icon">' + o.i + '</span><span class="quiz-option-text">' + o.t + '</span></div>';
+  });
+  html += '</div>';
+  html += '<div class="quiz-nav"><button class="btn-ghost" id="q-back-btn">' + (qIdx > 0 ? '← Back' : '') + '</button><span style="font-size:13px;color:var(--text-hint)">' + (qIdx+1) + ' / ' + QUIZ.length + '</span><span></span></div>';
+  document.getElementById('quiz-body').innerHTML = html;
+  document.querySelectorAll('.quiz-option').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var i = parseInt(this.getAttribute('data-idx'));
+      document.querySelectorAll('.quiz-option').forEach(function(x){ x.classList.remove('selected'); });
+      this.classList.add('selected');
+      qAnswers[qIdx] = i;
+      setTimeout(function() {
+        if (qIdx < QUIZ.length - 1) { qIdx++; renderQuiz(); }
+        else { finishQuiz(); }
+      }, 350);
+    });
+  });
+  var qb = document.getElementById('q-back-btn');
+  if (qb) {
+    qb.addEventListener('click', function() {
+      if (qIdx > 0) { qIdx--; renderQuiz(); }
+    });
+  }
+}
+
+function finishQuiz() {
+  var sum = qAnswers.reduce(function(a,b){ return a+b; }, 0);
+  ud.persona = PERSONAS[sum % PERSONAS.length];
+  try { localStorage.setItem('pogData', JSON.stringify(ud)); } catch(e) {}
+  buildDash();
+  show('home');
+}
+
+function buildDash() {
+  var h = parseFloat(ud.height) || 160;
+  var w = parseFloat(ud.weight) || 65;
+  var pw = parseFloat(ud.preweight) || 58;
+  var bmi = (w / Math.pow(h/100, 2)).toFixed(1);
+  var gain = (w - pw).toFixed(1);
+  var bmiS = bmi < 18.5 ? 'Underweight ⚠️' : bmi < 25 ? 'Normal ✓' : bmi < 30 ? 'Overweight ⚠️' : 'Obese ⚠️';
+  document.getElementById('d-name').textContent = ud.name || 'Mama';
+  document.getElementById('d-week').textContent = ud.weeks || '20';
+  document.getElementById('d-bmi').textContent = bmi;
+  document.getElementById('d-bmi-s').textContent = bmiS;
+  document.getElementById('d-gain').textContent = gain + ' kg';
+  document.getElementById('d-budget').textContent = parseInt(ud.food || 3000).toLocaleString();
+  document.getElementById('d-reminder').textContent = (ud.reminder || 'Monthly') + ' reminder set';
+  document.getElementById('p-name').textContent = ud.name || 'Mama';
+  document.getElementById('p-week').textContent = 'Week ' + (ud.weeks || 20) + ' · 2nd Trimester';
+  document.getElementById('p-persona').textContent = '✨ ' + (ud.persona || 'Nurturing Soul');
+  document.getElementById('p-height').textContent = (ud.height || 160) + ' cm';
+  document.getElementById('p-weight').textContent = (ud.weight || 65) + ' kg';
+  document.getElementById('p-preweight').textContent = (ud.preweight || 58) + ' kg';
+  document.getElementById('p-bmi').textContent = bmi + ' — ' + (bmi < 25 ? 'Normal' : 'Consult doctor');
+  document.getElementById('p-blood').textContent = ud.blood || 'O+';
+  document.getElementById('p-reminder').textContent = ud.reminder || 'Monthly';
+  document.getElementById('p-food').textContent = 'LKR ' + parseInt(ud.food || 3000).toLocaleString();
+  document.getElementById('p-med').textContent = 'LKR ' + parseInt(ud.med || 5000).toLocaleString();
+}
+
+function addMsg(text, who) {
+  var div = document.createElement('div');
+  div.className = 'msg msg-' + who + ' fade-in';
+  div.textContent = text;
+  var msgs = document.getElementById('chat-msgs');
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+function addTyping() {
+  var div = document.createElement('div');
+  div.className = 'msg msg-ai';
+  div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  var msgs = document.getElementById('chat-msgs');
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  return div;
+}
+
+async function sendChat(text) {
+  if (!text) {
+    var inp = document.getElementById('chat-inp');
+    text = inp.value.trim();
+    if (!text) return;
+    inp.value = '';
+  }
+  addMsg(text, 'user');
+  var typing = addTyping();
+  var sys = 'You are Blossom, a warm caring AI pregnancy companion. User: ' + (ud.name||'Mama') + ', ' + (ud.weeks||20) + ' weeks pregnant, weight ' + (ud.weight||65) + 'kg, height ' + (ud.height||160) + 'cm, pre-pregnancy weight ' + (ud.preweight||58) + 'kg, conditions: ' + (ud.conditions||'none') + ', weekly food budget: LKR ' + (ud.food||3000) + ', medicine budget: LKR ' + (ud.med||5000) + ', personality: ' + (ud.persona||'Nurturing Soul') + '. Give warm, personalised, supportive answers about pregnancy and women\'s health. Under 100 words. Use 1-2 relevant emojis.';
+  try {
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:200, system:sys, messages:[{role:'user',content:text}]})
+    });
+    var data = await res.json();
+    typing.remove();
+    var reply = (data.content && data.content[0] && data.content[0].text) || "I'm here for you, mama! 💕";
+    addMsg(reply, 'ai');
+  } catch(e) {
+    typing.remove();
+    addMsg("I'm always here for you! Try again in a moment. 💕", 'ai');
+  }
+}
+
+// Wire up all buttons safely after DOM is ready
+document.getElementById('btn-signup').addEventListener('click', function(){ show('signup'); });
+document.getElementById('btn-signin').addEventListener('click', function(){
+  try {
+    var saved = localStorage.getItem('pogData');
+    if (saved) { ud = JSON.parse(saved); }
+    else { ud = {name:'Sarah',age:'28',blood:'O+',height:'160',weight:'65',preweight:'58',weeks:'20',conditions:'None',food:'3000',med:'5000',reminder:'Monthly',persona:'Nurturing Soul'}; }
+  } catch(e) {
+    ud = {name:'Sarah',age:'28',blood:'O+',height:'160',weight:'65',preweight:'58',weeks:'20',conditions:'None',food:'3000',med:'5000',reminder:'Monthly',persona:'Nurturing Soul'};
+  }
+  buildDash();
+  show('home');
+});
+document.getElementById('signup-back').addEventListener('click', function(){ show('splash'); });
+document.getElementById('btn-to-quiz').addEventListener('click', function(){
+  collectSignup();
+  qIdx = 0; qAnswers = [];
+  renderQuiz();
+  show('quiz');
+});
+document.getElementById('quiz-back').addEventListener('click', function(){ show('signup'); });
+document.getElementById('nav-home').addEventListener('click', function(){
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  this.classList.add('active');
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('home').classList.add('active');
+});
+document.getElementById('nav-chat').addEventListener('click', function(){
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  this.classList.add('active');
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('chat-screen').classList.add('active');
+});
+document.getElementById('nav-reports').addEventListener('click', function(){
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  this.classList.add('active');
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('reports-screen').classList.add('active');
+});
+document.getElementById('nav-profile').addEventListener('click', function(){
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  this.classList.add('active');
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('profile-screen').classList.add('active');
+});
+document.getElementById('send-btn').addEventListener('click', function(){ sendChat(); });
+document.getElementById('chat-inp').addEventListener('keydown', function(e){ if(e.key==='Enter') sendChat(); });
+document.getElementById('chip1').addEventListener('click', function(){ sendChat('What foods should I avoid this week?'); });
+document.getElementById('chip2').addEventListener('click', function(){ sendChat('I have lower back pain. What should I do?'); });
+document.getElementById('chip3').addEventListener('click', function(){ sendChat('Am I gaining the right amount of weight?'); });
+document.getElementById('chip4').addEventListener('click', function(){ sendChat('What symptoms are normal in my week?'); });
+document.getElementById('upload-zone').addEventListener('click', function(){
+  var list = document.getElementById('report-list');
+  var item = document.createElement('div');
+  item.className = 'report-item fade-in';
+  item.innerHTML = '<div class="report-icon">📊</div><div class="report-info"><div class="report-name">New Report Uploaded</div><div class="report-date">Just now</div></div><div class="report-status rs-pend">Analyzing…</div>';
+  list.insertBefore(item, list.firstChild);
+  setTimeout(function(){ item.querySelector('.report-status').className='report-status rs-ok'; item.querySelector('.report-status').textContent='Analyzed ✓'; }, 2500);
+});
+try {
+  var saved = localStorage.getItem('pogData');
+  if (saved) { ud = JSON.parse(saved); }
+} catch(e) {}
+</script>
