@@ -1,0 +1,721 @@
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --rose:#f2a0b0;--rose-deep:#d4637a;--rose-pale:#fdf0f3;
+  --sage:#a8c5b0;--sage-deep:#5a8a6a;--sage-pale:#f0f7f2;
+  --gold-deep:#b8922a;--cream:#fdfaf5;
+  --text:#3a2d35;--text-soft:#7a6570;--text-hint:#b5a0ab;
+  --white:#fff;--border:#ecdde2;
+  --nav-h:62px;
+  --pad:16px;--gap:12px;--radius:14px;--radius-lg:18px;
+}
+@media(min-width:600px){:root{--pad:24px;--gap:16px;--radius:16px;--radius-lg:22px;--nav-h:70px}}
+html,body{width:100%;min-height:100%;overflow-x:hidden;background:var(--cream);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px}
+.app{width:100%;max-width:480px;margin:0 auto;position:relative;min-height:100vh}
+@media(min-width:900px){.app{max-width:520px}}
+.screen{display:none;flex-direction:column;min-height:100vh;width:100%}
+.screen.active{display:flex}
+/* SPLASH */
+#splash{background:linear-gradient(160deg,#fdf0f3 0%,#f0f7f2 50%,#fdfaf5 100%);justify-content:center;align-items:center;text-align:center;padding:clamp(24px,8vw,60px) var(--pad)}
+.splash-flower{font-size:clamp(52px,14vw,80px);margin-bottom:12px;animation:bloom 1.4s ease-out}
+@keyframes bloom{0%{transform:scale(0.3);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.app-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,7vw,40px);font-weight:600;color:var(--rose-deep);line-height:1.2}
+.app-subtitle{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,3.5vw,18px);font-style:italic;color:var(--text-soft);margin:8px 0 20px}
+.tagline{font-size:clamp(12px,3vw,15px);color:var(--text-hint);margin-bottom:36px;line-height:1.7}
+.btn-primary{display:block;width:100%;background:linear-gradient(135deg,var(--rose-deep),#c0506a);color:white;border:none;border-radius:50px;padding:clamp(13px,3.5vw,18px) 40px;font-size:clamp(14px,3.5vw,16px);font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 20px rgba(212,99,122,0.3);text-align:center;margin-bottom:12px;-webkit-appearance:none}
+.btn-primary:active{transform:scale(0.98)}
+.btn-secondary{display:block;width:100%;background:transparent;color:var(--rose-deep);border:1.5px solid var(--rose);border-radius:50px;padding:clamp(11px,3vw,16px) 40px;font-size:clamp(14px,3.5vw,16px);font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all 0.2s;text-align:center;-webkit-appearance:none}
+.btn-secondary:active{background:var(--rose-pale)}
+/* FORMS */
+.screen-header{display:flex;align-items:center;gap:10px;padding:var(--pad) var(--pad) 0;flex-shrink:0}
+.back-btn{background:var(--rose-pale);border:none;cursor:pointer;color:var(--rose-deep);font-size:clamp(13px,3.5vw,16px);padding:8px 14px;border-radius:10px;font-family:'DM Sans',sans-serif;white-space:nowrap;-webkit-appearance:none}
+.screen-title{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5.5vw,28px);font-weight:600;color:var(--text)}
+.screen-subtitle{font-size:12px;color:var(--text-hint);margin:6px var(--pad) 14px}
+.scroll-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:24px}
+.section-card{background:var(--rose-pale);border-radius:var(--radius);padding:var(--pad);margin:0 var(--pad) 14px;border:1px solid rgba(242,160,176,0.3)}
+.section-card-title{font-size:11px;font-weight:500;color:var(--rose-deep);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:11px;font-weight:500;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;display:block}
+.form-input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:clamp(10px,2.5vw,13px) 14px;font-size:clamp(13px,3.5vw,15px);font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);outline:none;transition:border-color 0.2s;-webkit-appearance:none}
+.form-input:focus{border-color:var(--rose)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap)}
+.submit-wrap{padding:var(--pad)}
+/* COUNTRY PICKER */
+.country-picker-btn{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:clamp(10px,2.5vw,13px) 14px;font-size:clamp(13px,3.5vw,15px);font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);outline:none;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;-webkit-appearance:none}
+.country-picker-btn:focus,.country-picker-btn:hover{border-color:var(--rose)}
+.country-modal-overlay{position:fixed;inset:0;background:rgba(58,45,53,0.45);z-index:2000;display:flex;align-items:flex-end;justify-content:center}
+.country-modal{background:var(--white);border-radius:var(--radius-lg) var(--radius-lg) 0 0;width:100%;max-width:480px;max-height:80vh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
+@media(min-width:600px){.country-modal{border-radius:var(--radius-lg);max-height:70vh;margin-bottom:40px}}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,5vw,22px);font-weight:600;color:var(--text);padding:12px var(--pad) 10px;text-align:center}
+.country-search-wrap{padding:0 var(--pad) 10px;position:relative}
+.country-search{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px 10px 36px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--cream);outline:none;-webkit-appearance:none}
+.country-search:focus{border-color:var(--rose)}
+.search-icon{position:absolute;left:calc(var(--pad) + 11px);top:50%;transform:translateY(-50%);color:var(--text-hint);font-size:15px;pointer-events:none}
+.country-list{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
+.country-item{display:flex;align-items:center;gap:12px;padding:11px var(--pad);cursor:pointer;border-bottom:0.5px solid var(--border);transition:background 0.15s}
+.country-item:hover,.country-item:active{background:var(--rose-pale)}
+.country-item.selected{background:var(--rose-pale)}
+.country-flag{font-size:22px;flex-shrink:0;width:28px;text-align:center}
+.country-name{font-size:14px;color:var(--text)}
+.country-currency{font-size:11px;color:var(--text-hint);margin-left:auto;white-space:nowrap}
+/* QUIZ */
+.quiz-progress{height:5px;background:var(--border);border-radius:3px;margin:12px var(--pad) 20px;overflow:hidden;flex-shrink:0}
+.quiz-bar{height:100%;background:linear-gradient(90deg,var(--rose),var(--sage));border-radius:3px;transition:width 0.4s ease}
+.quiz-q-num{font-size:11px;color:var(--text-hint);margin-bottom:8px;font-weight:500;letter-spacing:0.5px;padding:0 var(--pad)}
+.quiz-question{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,5vw,24px);font-weight:600;color:var(--text);line-height:1.4;margin-bottom:20px;padding:0 var(--pad)}
+.quiz-options{display:flex;flex-direction:column;gap:10px;padding:0 var(--pad)}
+.quiz-option{border:1.5px solid var(--border);border-radius:var(--radius);padding:clamp(12px,3vw,16px);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:12px;background:var(--white)}
+.quiz-option:active,.quiz-option.selected{border-color:var(--rose-deep);background:var(--rose-pale)}
+.quiz-option-icon{font-size:clamp(20px,5vw,26px);flex-shrink:0}
+.quiz-option-text{font-size:clamp(13px,3.5vw,15px);color:var(--text);line-height:1.4}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding:0 var(--pad) var(--pad)}
+.btn-ghost{background:none;border:none;color:var(--text-soft);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;padding:8px;-webkit-appearance:none}
+/* HOME */
+.pb-nav{padding-bottom:calc(var(--nav-h) + 16px)}
+.home-header{background:linear-gradient(160deg,#fdf0f3,#f0f7f2);padding:clamp(20px,5vw,32px) var(--pad) clamp(18px,4vw,28px);position:relative;overflow:hidden;flex-shrink:0}
+.home-header::after{content:'🌸';position:absolute;right:-8px;top:8px;font-size:clamp(60px,18vw,90px);opacity:0.12;pointer-events:none}
+.greeting{font-size:12px;color:var(--text-soft);margin-bottom:2px}
+.mama-name{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,6vw,32px);font-weight:600;color:var(--text)}
+.week-badge{display:inline-flex;align-items:center;gap:6px;background:white;border:1px solid var(--rose);border-radius:50px;padding:5px 13px;margin-top:10px;font-size:12px;font-weight:500;color:var(--rose-deep)}
+.health-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gap);padding:var(--gap) var(--pad)}
+.h-card{background:white;border-radius:var(--radius);padding:clamp(10px,2.5vw,14px);text-align:center;border:1px solid var(--border)}
+.h-val{font-size:clamp(14px,4vw,19px);font-weight:500;color:var(--text);font-family:'Cormorant Garamond',serif}
+.h-lbl{font-size:clamp(9px,2.2vw,11px);color:var(--text-hint);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px}
+.h-status{font-size:clamp(9px,2.2vw,10px);margin-top:3px;font-weight:500}
+.h-status.good{color:var(--sage-deep)}
+.h-status.warn{color:var(--gold-deep)}
+.sec-head{padding:8px var(--pad);display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.sec-head-title{font-family:'Cormorant Garamond',serif;font-size:clamp(16px,4.5vw,20px);font-weight:600;color:var(--text)}
+.food-scroll{display:flex;gap:var(--gap);padding:4px var(--pad) 8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.food-scroll::-webkit-scrollbar{display:none}
+.food-card{min-width:clamp(120px,32vw,155px);background:white;border-radius:var(--radius);padding:clamp(12px,3vw,16px);border:1px solid var(--border);flex-shrink:0}
+.food-emoji{font-size:clamp(22px,6vw,30px);margin-bottom:6px}
+.food-name{font-size:clamp(12px,3vw,14px);font-weight:500;color:var(--text);margin-bottom:2px}
+.food-detail{font-size:clamp(10px,2.5vw,12px);color:var(--text-hint);line-height:1.4}
+.food-budget{font-size:clamp(9px,2.3vw,11px);color:var(--sage-deep);margin-top:4px;font-weight:500}
+.exercise-card{margin:0 var(--pad) 10px;background:white;border-radius:var(--radius);padding:clamp(12px,3vw,16px);border:1px solid var(--border);display:flex;gap:12px;align-items:flex-start}
+.ex-icon{font-size:clamp(22px,6vw,30px);flex-shrink:0;margin-top:2px}
+.ex-name{font-size:clamp(13px,3.5vw,15px);font-weight:500;color:var(--text);margin-bottom:3px}
+.ex-desc{font-size:clamp(11px,2.8vw,13px);color:var(--text-soft);line-height:1.5;margin-bottom:6px}
+.ex-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ex-tag{font-size:clamp(9px,2.3vw,11px);padding:3px 8px;border-radius:20px;font-weight:500}
+.ex-tag.safe{background:#f0f7f2;color:var(--sage-deep)}
+.ex-tag.trim{background:#fdf0f3;color:var(--rose-deep)}
+.ex-tag.dur{background:#fdfaf5;color:var(--gold-deep)}
+.reminder-card{margin:0 var(--pad) var(--pad);background:linear-gradient(135deg,#fdf0f3,#f0f7f2);border-radius:var(--radius);padding:clamp(12px,3vw,16px);border:1px solid rgba(242,160,176,0.4);display:flex;gap:12px;align-items:center}
+.reminder-btn{background:var(--rose-deep);color:white;border:none;border-radius:20px;padding:7px clamp(10px,3vw,16px);font-size:clamp(10px,2.5vw,12px);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;-webkit-appearance:none}
+/* NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:white;border-top:1px solid var(--border);display:flex;padding:clamp(6px,1.5vw,10px) 0 clamp(10px,3vw,14px);z-index:999}
+@media(min-width:600px){.bottom-nav{max-width:520px}}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px}
+.nav-icon{font-size:clamp(18px,5vw,22px)}
+.nav-label{font-size:clamp(9px,2.5vw,11px);color:var(--text-hint);font-weight:500}
+.nav-item.active .nav-label{color:var(--rose-deep)}
+/* CHAT */
+.chat-header{background:white;padding:clamp(14px,4vw,20px) var(--pad);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.ai-avatar{width:clamp(36px,10vw,44px);height:clamp(36px,10vw,44px);border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--sage));display:flex;align-items:center;justify-content:center;font-size:clamp(16px,4.5vw,20px);flex-shrink:0}
+.ai-name{font-weight:500;font-size:clamp(13px,3.5vw,15px);color:var(--text)}
+.ai-status{font-size:clamp(10px,2.5vw,12px);color:var(--sage-deep)}
+.quick-chips{display:flex;gap:8px;padding:10px var(--pad);overflow-x:auto;scrollbar-width:none;background:white;border-bottom:1px solid var(--border);flex-shrink:0}
+.quick-chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;background:var(--rose-pale);border:1px solid rgba(242,160,176,0.5);color:var(--rose-deep);border-radius:20px;padding:6px 12px;font-size:clamp(11px,3vw,13px);cursor:pointer;font-family:'DM Sans',sans-serif}
+.chip:active{background:var(--rose)}
+.chat-messages{flex:1;padding:var(--pad);display:flex;flex-direction:column;gap:12px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:clamp(70px,18vw,90px)}
+.msg{max-width:85%;padding:clamp(10px,3vw,14px) clamp(12px,3.5vw,16px);border-radius:16px;font-size:clamp(12px,3.2vw,14px);line-height:1.65}
+.msg-ai{background:white;border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start}
+.msg-user{background:linear-gradient(135deg,var(--rose-deep),#c0506a);color:white;border-bottom-right-radius:4px;align-self:flex-end}
+.typing-dots{display:flex;gap:4px;padding:4px}
+.typing-dots span{width:7px;height:7px;border-radius:50%;background:var(--text-hint);animation:td 1.2s infinite}
+.typing-dots span:nth-child(2){animation-delay:0.2s}
+.typing-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes td{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-input-bar{display:flex;gap:10px;align-items:center;padding:clamp(8px,2vw,12px) var(--pad);background:white;border-top:1px solid var(--border);flex-shrink:0}
+.chat-input{flex:1;border:1.5px solid var(--border);border-radius:22px;padding:clamp(9px,2.5vw,12px) clamp(12px,3vw,16px);font-size:clamp(13px,3.5vw,15px);font-family:'DM Sans',sans-serif;outline:none;color:var(--text);background:var(--cream);-webkit-appearance:none}
+.chat-input:focus{border-color:var(--rose)}
+.send-btn{background:var(--rose-deep);color:white;border:none;border-radius:50%;width:clamp(36px,10vw,42px);height:clamp(36px,10vw,42px);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;-webkit-appearance:none}
+/* REPORTS */
+.reports-header{background:white;padding:clamp(14px,4vw,20px) var(--pad);border-bottom:1px solid var(--border);flex-shrink:0}
+.upload-zone{margin:var(--pad);background:white;border:2px dashed var(--rose);border-radius:var(--radius-lg);padding:clamp(24px,6vw,36px) var(--pad);text-align:center;cursor:pointer}
+.upload-zone:active{background:var(--rose-pale)}
+.upload-icon{font-size:clamp(28px,8vw,40px);margin-bottom:10px}
+.upload-title{font-size:clamp(13px,3.5vw,15px);font-weight:500;color:var(--text);margin-bottom:4px}
+.upload-sub{font-size:clamp(11px,3vw,13px);color:var(--text-hint)}
+.report-item{margin:0 var(--pad) 10px;background:white;border-radius:var(--radius);padding:clamp(12px,3vw,16px);border:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.report-icon{font-size:clamp(20px,5vw,26px)}
+.report-info{flex:1}
+.report-name{font-size:clamp(12px,3.2vw,14px);font-weight:500;color:var(--text)}
+.report-date{font-size:clamp(10px,2.5vw,12px);color:var(--text-hint)}
+.report-status{font-size:clamp(9px,2.3vw,11px);padding:3px 8px;border-radius:10px;font-weight:500;white-space:nowrap}
+.rs-ok{background:#f0f7f2;color:var(--sage-deep)}
+.rs-pend{background:#fdfaf5;color:var(--gold-deep)}
+/* PROFILE */
+.profile-hero{background:linear-gradient(160deg,#fdf0f3,#f0f7f2);padding:clamp(22px,6vw,32px) var(--pad) clamp(18px,5vw,28px);text-align:center;flex-shrink:0}
+.profile-avatar{width:clamp(60px,16vw,80px);height:clamp(60px,16vw,80px);border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--sage));margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:clamp(26px,7vw,36px);border:3px solid white}
+.pname{font-family:'Cormorant Garamond',serif;font-size:clamp(20px,5.5vw,28px);font-weight:600;color:var(--text)}
+.pweek{font-size:clamp(12px,3vw,14px);color:var(--text-soft);margin-top:4px}
+.persona-badge{display:inline-flex;align-items:center;gap:6px;background:white;border:1px solid var(--rose);border-radius:20px;padding:5px 14px;margin-top:10px;font-size:clamp(11px,3vw,13px);color:var(--rose-deep);font-weight:500}
+.storage-note{margin:var(--pad) var(--pad) 0;background:var(--sage-pale);border-radius:var(--radius);padding:12px 14px;display:flex;gap:10px;border:1px solid rgba(168,197,176,0.5)}
+.storage-text{font-size:clamp(11px,3vw,13px);color:var(--sage-deep);line-height:1.5}
+.prof-section{margin:14px var(--pad) 0}
+.prof-section-title{font-size:11px;font-weight:500;color:var(--text-hint);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px}
+.prof-row{background:white;border-radius:10px;padding:clamp(11px,3vw,14px) clamp(12px,3vw,16px);display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;border:1px solid var(--border)}
+.prof-row-label{font-size:clamp(12px,3.2vw,14px);color:var(--text-soft)}
+.prof-row-val{font-size:clamp(12px,3.2vw,14px);font-weight:500;color:var(--text);text-align:right;max-width:60%}
+.hidden{display:none!important}
+.fade-in{animation:fi 0.3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+<div class="app">
+
+<!-- SPLASH -->
+<div id="splash" class="screen active">
+  <div class="splash-flower">🌸</div>
+  <div class="app-title">Pregnancy Overcome<br>Guide</div>
+  <div class="app-subtitle">Your gentle companion through every stage</div>
+  <p class="tagline">Personalised food plans, exercises, health insights,<br>and a caring AI — just for you and your baby.</p>
+  <button class="btn-primary" id="btn-signup">✨ Begin Your Journey</button>
+  <button class="btn-secondary" id="btn-signin">Sign In</button>
+</div>
+
+<!-- SIGNUP -->
+<div id="signup" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="signup-back">← Back</button>
+    <div class="screen-title">Tell Us About You</div>
+  </div>
+  <div class="scroll-body">
+    <p class="screen-subtitle">All details saved privately on your device only 🔒</p>
+    <div class="section-card">
+      <div class="section-card-title">👤 About You</div>
+      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="inp-name" type="text" placeholder="Your name"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Age</label><input class="form-input" id="inp-age" type="number" placeholder="25" inputmode="numeric"></div>
+        <div class="form-group"><label class="form-label">Blood Type</label><select class="form-input" id="inp-blood"><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option></select></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Country</label>
+        <button class="country-picker-btn" id="country-btn" type="button">
+          <span id="country-btn-text">🌍 Select your country</span>
+          <span style="color:var(--text-hint);font-size:12px">▼</span>
+        </button>
+      </div>
+    </div>
+    <div class="section-card">
+      <div class="section-card-title">📏 Body Details</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Height (cm)</label><input class="form-input" id="inp-height" type="number" placeholder="160" inputmode="numeric"></div>
+        <div class="form-group"><label class="form-label">Weight (kg)</label><input class="form-input" id="inp-weight" type="number" placeholder="65" inputmode="decimal"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Pre-preg Weight</label><input class="form-input" id="inp-preweight" type="number" placeholder="58" inputmode="decimal"></div>
+        <div class="form-group"><label class="form-label">Weeks Pregnant</label><input class="form-input" id="inp-weeks" type="number" placeholder="20" inputmode="numeric"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Medical Conditions</label><input class="form-input" id="inp-conditions" type="text" placeholder="e.g. Gestational diabetes, or none"></div>
+    </div>
+    <div class="section-card">
+      <div class="section-card-title">💰 Financial Details</div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Weekly Food Budget</label><input class="form-input" id="inp-food" type="number" placeholder="3000" inputmode="numeric"></div>
+        <div class="form-group"><label class="form-label">Monthly Medicine</label><input class="form-input" id="inp-med" type="number" placeholder="5000" inputmode="numeric"></div>
+      </div>
+      <div class="form-group" style="font-size:11px;color:var(--text-hint);margin-top:-6px" id="currency-hint">Currency will adjust to your country</div>
+      <div class="form-group"><label class="form-label">Checkup Reminder</label><select class="form-input" id="inp-reminder"><option>Weekly</option><option>Bi-Monthly</option><option selected>Monthly</option></select></div>
+    </div>
+    <div class="submit-wrap"><button class="btn-primary" id="btn-to-quiz">Continue to Personality Quiz →</button></div>
+  </div>
+</div>
+
+<!-- COUNTRY MODAL -->
+<div class="country-modal-overlay hidden" id="country-modal-overlay">
+  <div class="country-modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Choose Your Country</div>
+    <div class="country-search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="country-search" id="country-search" type="text" placeholder="Search country…" autocomplete="off">
+    </div>
+    <div class="country-list" id="country-list"></div>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" id="quiz-back">← Back</button>
+    <div class="screen-title">Know Yourself</div>
+  </div>
+  <div class="quiz-progress"><div class="quiz-bar" id="quiz-bar" style="width:0%"></div></div>
+  <div id="quiz-body" class="scroll-body"></div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen">
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch" class="pb-nav">
+    <div class="home-header">
+      <div class="greeting">Good morning, mama 🌸</div>
+      <div class="mama-name" id="d-name">Sarah</div>
+      <div class="week-badge">🌱 Week <span id="d-week">20</span> · 2nd Trimester</div>
+    </div>
+    <div class="health-strip">
+      <div class="h-card"><div class="h-val" id="d-bmi">24.2</div><div class="h-lbl">BMI</div><div class="h-status good" id="d-bmi-s">Normal ✓</div></div>
+      <div class="h-card"><div class="h-val" id="d-gain">7.0 kg</div><div class="h-lbl">Weight Gain</div><div class="h-status good">On track ✓</div></div>
+      <div class="h-card"><div class="h-val" id="d-budget">3,000</div><div class="h-lbl" id="d-budget-lbl">LKR/week</div><div class="h-status warn">Food budget</div></div>
+    </div>
+    <div class="sec-head"><div class="sec-head-title">Today's Food Plan 🥗</div><div style="font-size:11px;color:var(--rose-deep)" id="d-cuisine-tag">Sri Lankan</div></div>
+    <div class="food-scroll" id="food-scroll"></div>
+    <div class="sec-head" style="margin-top:8px"><div class="sec-head-title">Today's Exercises 🤸</div></div>
+    <div class="exercise-card"><div class="ex-icon">🚶</div><div><div class="ex-name">Gentle Morning Walk</div><div class="ex-desc">A light 15-min walk at a comfortable pace. Keep posture upright, avoid uneven surfaces.</div><div class="ex-tags"><span class="ex-tag safe">Safe T2</span><span class="ex-tag dur">15 mins</span></div></div></div>
+    <div class="exercise-card"><div class="ex-icon">🧘</div><div><div class="ex-name">Prenatal Yoga — Cat-Cow</div><div class="ex-desc">Hands and knees, alternate arching and rounding your back. Eases back pain.</div><div class="ex-tags"><span class="ex-tag safe">Back relief</span><span class="ex-tag trim">Low impact</span><span class="ex-tag dur">10 mins</span></div></div></div>
+    <div class="exercise-card"><div class="ex-icon">💪</div><div><div class="ex-name">Kegel Exercises</div><div class="ex-desc">Tighten pelvic floor muscles 5 sec, release, repeat 10 times. Prepares for labour.</div><div class="ex-tags"><span class="ex-tag safe">All trimesters</span><span class="ex-tag dur">5 mins</span></div></div></div>
+    <div class="sec-head" style="margin-top:4px"><div class="sec-head-title">Next Checkup 📅</div></div>
+    <div class="reminder-card">
+      <div style="font-size:clamp(22px,6vw,28px)">🏥</div>
+      <div style="flex:1"><div style="font-size:clamp(12px,3.2vw,14px);font-weight:500;color:var(--text)">Antenatal Checkup Due</div><div style="font-size:clamp(11px,3vw,13px);color:var(--text-soft)" id="d-reminder">Monthly reminder set</div></div>
+      <button class="reminder-btn">Set Alert</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div id="chat-screen" class="screen">
+  <div class="chat-header">
+    <div class="ai-avatar">🌸</div>
+    <div><div class="ai-name">Blossom AI</div><div class="ai-status">Your pregnancy companion · always here</div></div>
+  </div>
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;padding-bottom:var(--nav-h)">
+    <div class="quick-chips">
+      <div class="chip" id="chip1">Foods to avoid 🚫</div>
+      <div class="chip" id="chip2">Back pain help 💆</div>
+      <div class="chip" id="chip3">Weight check ⚖️</div>
+      <div class="chip" id="chip4">Normal symptoms 🩺</div>
+    </div>
+    <div class="chat-messages" id="chat-msgs">
+      <div class="msg msg-ai">Hello, mama! 💕 I'm Blossom, your personal pregnancy companion. I know your journey — your week, your body, and your goals. Ask me anything, any time.</div>
+    </div>
+    <div class="chat-input-bar">
+      <input class="chat-input" id="chat-inp" type="text" placeholder="Ask Blossom anything…">
+      <button class="send-btn" id="send-btn">↑</button>
+    </div>
+  </div>
+</div>
+
+<!-- REPORTS -->
+<div id="reports-screen" class="screen">
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch" class="pb-nav">
+    <div class="reports-header">
+      <div class="screen-title">Medical Reports 📋</div>
+      <p style="font-size:clamp(12px,3vw,14px);color:var(--text-soft);margin-top:4px">Upload reports so Blossom AI can understand your condition</p>
+    </div>
+    <div class="upload-zone" id="upload-zone">
+      <div class="upload-icon">📄</div>
+      <div class="upload-title">Tap to Upload a Report</div>
+      <div class="upload-sub">Ultrasound, blood test, urine — any format</div>
+    </div>
+    <div id="report-list">
+      <div class="report-item"><div class="report-icon">🔬</div><div class="report-info"><div class="report-name">Blood Test — Week 16</div><div class="report-date">Uploaded 3 days ago</div></div><div class="report-status rs-ok">Analyzed ✓</div></div>
+      <div class="report-item"><div class="report-icon">🩺</div><div class="report-info"><div class="report-name">Ultrasound Scan — Week 12</div><div class="report-date">Uploaded 2 weeks ago</div></div><div class="report-status rs-ok">Analyzed ✓</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="profile-screen" class="screen">
+  <div style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch" class="pb-nav">
+    <div class="profile-hero">
+      <div class="profile-avatar">🤰</div>
+      <div class="pname" id="p-name">Sarah</div>
+      <div class="pweek" id="p-week">Week 20 · 2nd Trimester</div>
+      <div class="persona-badge" id="p-persona">✨ Nurturing Soul</div>
+    </div>
+    <div class="storage-note">
+      <div style="font-size:16px;flex-shrink:0">🔒</div>
+      <div class="storage-text">All your data is saved privately on this device only. Nothing is shared externally.</div>
+    </div>
+    <div class="prof-section">
+      <div class="prof-section-title">Personal Details</div>
+      <div class="prof-row"><span class="prof-row-label">Country</span><span class="prof-row-val" id="p-country">Sri Lanka 🇱🇰</span></div>
+      <div class="prof-row"><span class="prof-row-label">Height</span><span class="prof-row-val" id="p-height">160 cm</span></div>
+      <div class="prof-row"><span class="prof-row-label">Current Weight</span><span class="prof-row-val" id="p-weight">65 kg</span></div>
+      <div class="prof-row"><span class="prof-row-label">Pre-pregnancy Weight</span><span class="prof-row-val" id="p-preweight">58 kg</span></div>
+      <div class="prof-row"><span class="prof-row-label">BMI</span><span class="prof-row-val" id="p-bmi">24.2 — Normal</span></div>
+      <div class="prof-row"><span class="prof-row-label">Blood Type</span><span class="prof-row-val" id="p-blood">O+</span></div>
+    </div>
+    <div class="prof-section" style="margin-bottom:16px">
+      <div class="prof-section-title">Preferences & Budget</div>
+      <div class="prof-row"><span class="prof-row-label">Checkup Reminders</span><span class="prof-row-val" id="p-reminder">Monthly</span></div>
+      <div class="prof-row"><span class="prof-row-label">Weekly Food Budget</span><span class="prof-row-val" id="p-food">LKR 3,000</span></div>
+      <div class="prof-row"><span class="prof-row-label">Medicine Budget</span><span class="prof-row-val" id="p-med">LKR 5,000</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav hidden" id="bottom-nav">
+  <div class="nav-item active" id="nav-home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+  <div class="nav-item" id="nav-chat"><div class="nav-icon">💬</div><div class="nav-label">Blossom</div></div>
+  <div class="nav-item" id="nav-reports"><div class="nav-icon">📋</div><div class="nav-label">Reports</div></div>
+  <div class="nav-item" id="nav-profile"><div class="nav-icon">👤</div><div class="nav-label">Profile</div></div>
+</nav>
+</div>
+
+<script>
+var COUNTRIES=[
+  {name:"Afghanistan",flag:"🇦🇫",currency:"AFN",symbol:"؋",cuisine:"Afghan"},
+  {name:"Albania",flag:"🇦🇱",currency:"ALL",symbol:"L",cuisine:"Albanian"},
+  {name:"Algeria",flag:"🇩🇿",currency:"DZD",symbol:"DA",cuisine:"Algerian"},
+  {name:"Argentina",flag:"🇦🇷",currency:"ARS",symbol:"$",cuisine:"Argentine"},
+  {name:"Armenia",flag:"🇦🇲",currency:"AMD",symbol:"֏",cuisine:"Armenian"},
+  {name:"Australia",flag:"🇦🇺",currency:"AUD",symbol:"A$",cuisine:"Australian"},
+  {name:"Austria",flag:"🇦🇹",currency:"EUR",symbol:"€",cuisine:"Austrian"},
+  {name:"Azerbaijan",flag:"🇦🇿",currency:"AZN",symbol:"₼",cuisine:"Azerbaijani"},
+  {name:"Bahrain",flag:"🇧🇭",currency:"BHD",symbol:"BD",cuisine:"Bahraini"},
+  {name:"Bangladesh",flag:"🇧🇩",currency:"BDT",symbol:"৳",cuisine:"Bangladeshi"},
+  {name:"Belarus",flag:"🇧🇾",currency:"BYN",symbol:"Br",cuisine:"Belarusian"},
+  {name:"Belgium",flag:"🇧🇪",currency:"EUR",symbol:"€",cuisine:"Belgian"},
+  {name:"Bolivia",flag:"🇧🇴",currency:"BOB",symbol:"Bs",cuisine:"Bolivian"},
+  {name:"Bosnia",flag:"🇧🇦",currency:"BAM",symbol:"KM",cuisine:"Bosnian"},
+  {name:"Brazil",flag:"🇧🇷",currency:"BRL",symbol:"R$",cuisine:"Brazilian"},
+  {name:"Bulgaria",flag:"🇧🇬",currency:"BGN",symbol:"лв",cuisine:"Bulgarian"},
+  {name:"Cambodia",flag:"🇰🇭",currency:"KHR",symbol:"៛",cuisine:"Cambodian"},
+  {name:"Cameroon",flag:"🇨🇲",currency:"XAF",symbol:"Fr",cuisine:"Cameroonian"},
+  {name:"Canada",flag:"🇨🇦",currency:"CAD",symbol:"C$",cuisine:"Canadian"},
+  {name:"Chile",flag:"🇨🇱",currency:"CLP",symbol:"$",cuisine:"Chilean"},
+  {name:"China",flag:"🇨🇳",currency:"CNY",symbol:"¥",cuisine:"Chinese"},
+  {name:"Colombia",flag:"🇨🇴",currency:"COP",symbol:"$",cuisine:"Colombian"},
+  {name:"Costa Rica",flag:"🇨🇷",currency:"CRC",symbol:"₡",cuisine:"Costa Rican"},
+  {name:"Croatia",flag:"🇭🇷",currency:"EUR",symbol:"€",cuisine:"Croatian"},
+  {name:"Cuba",flag:"🇨🇺",currency:"CUP",symbol:"$",cuisine:"Cuban"},
+  {name:"Czech Republic",flag:"🇨🇿",currency:"CZK",symbol:"Kč",cuisine:"Czech"},
+  {name:"Denmark",flag:"🇩🇰",currency:"DKK",symbol:"kr",cuisine:"Danish"},
+  {name:"Dominican Republic",flag:"🇩🇴",currency:"DOP",symbol:"RD$",cuisine:"Dominican"},
+  {name:"Ecuador",flag:"🇪🇨",currency:"USD",symbol:"$",cuisine:"Ecuadorian"},
+  {name:"Egypt",flag:"🇪🇬",currency:"EGP",symbol:"£",cuisine:"Egyptian"},
+  {name:"El Salvador",flag:"🇸🇻",currency:"USD",symbol:"$",cuisine:"Salvadoran"},
+  {name:"Ethiopia",flag:"🇪🇹",currency:"ETB",symbol:"Br",cuisine:"Ethiopian"},
+  {name:"Finland",flag:"🇫🇮",currency:"EUR",symbol:"€",cuisine:"Finnish"},
+  {name:"France",flag:"🇫🇷",currency:"EUR",symbol:"€",cuisine:"French"},
+  {name:"Georgia",flag:"🇬🇪",currency:"GEL",symbol:"₾",cuisine:"Georgian"},
+  {name:"Germany",flag:"🇩🇪",currency:"EUR",symbol:"€",cuisine:"German"},
+  {name:"Ghana",flag:"🇬🇭",currency:"GHS",symbol:"₵",cuisine:"Ghanaian"},
+  {name:"Greece",flag:"🇬🇷",currency:"EUR",symbol:"€",cuisine:"Greek"},
+  {name:"Guatemala",flag:"🇬🇹",currency:"GTQ",symbol:"Q",cuisine:"Guatemalan"},
+  {name:"Honduras",flag:"🇭🇳",currency:"HNL",symbol:"L",cuisine:"Honduran"},
+  {name:"Hungary",flag:"🇭🇺",currency:"HUF",symbol:"Ft",cuisine:"Hungarian"},
+  {name:"India",flag:"🇮🇳",currency:"INR",symbol:"₹",cuisine:"Indian"},
+  {name:"Indonesia",flag:"🇮🇩",currency:"IDR",symbol:"Rp",cuisine:"Indonesian"},
+  {name:"Iran",flag:"🇮🇷",currency:"IRR",symbol:"﷼",cuisine:"Iranian"},
+  {name:"Iraq",flag:"🇮🇶",currency:"IQD",symbol:"ع.د",cuisine:"Iraqi"},
+  {name:"Ireland",flag:"🇮🇪",currency:"EUR",symbol:"€",cuisine:"Irish"},
+  {name:"Israel",flag:"🇮🇱",currency:"ILS",symbol:"₪",cuisine:"Israeli"},
+  {name:"Italy",flag:"🇮🇹",currency:"EUR",symbol:"€",cuisine:"Italian"},
+  {name:"Jamaica",flag:"🇯🇲",currency:"JMD",symbol:"J$",cuisine:"Jamaican"},
+  {name:"Japan",flag:"🇯🇵",currency:"JPY",symbol:"¥",cuisine:"Japanese"},
+  {name:"Jordan",flag:"🇯🇴",currency:"JOD",symbol:"JD",cuisine:"Jordanian"},
+  {name:"Kazakhstan",flag:"🇰🇿",currency:"KZT",symbol:"₸",cuisine:"Kazakh"},
+  {name:"Kenya",flag:"🇰🇪",currency:"KES",symbol:"KSh",cuisine:"Kenyan"},
+  {name:"Kuwait",flag:"🇰🇼",currency:"KWD",symbol:"KD",cuisine:"Kuwaiti"},
+  {name:"Lebanon",flag:"🇱🇧",currency:"LBP",symbol:"ل.ل",cuisine:"Lebanese"},
+  {name:"Libya",flag:"🇱🇾",currency:"LYD",symbol:"LD",cuisine:"Libyan"},
+  {name:"Malaysia",flag:"🇲🇾",currency:"MYR",symbol:"RM",cuisine:"Malaysian"},
+  {name:"Maldives",flag:"🇲🇻",currency:"MVR",symbol:"Rf",cuisine:"Maldivian"},
+  {name:"Mexico",flag:"🇲🇽",currency:"MXN",symbol:"$",cuisine:"Mexican"},
+  {name:"Morocco",flag:"🇲🇦",currency:"MAD",symbol:"MAD",cuisine:"Moroccan"},
+  {name:"Myanmar",flag:"🇲🇲",currency:"MMK",symbol:"K",cuisine:"Burmese"},
+  {name:"Nepal",flag:"🇳🇵",currency:"NPR",symbol:"₨",cuisine:"Nepali"},
+  {name:"Netherlands",flag:"🇳🇱",currency:"EUR",symbol:"€",cuisine:"Dutch"},
+  {name:"New Zealand",flag:"🇳🇿",currency:"NZD",symbol:"NZ$",cuisine:"New Zealander"},
+  {name:"Nigeria",flag:"🇳🇬",currency:"NGN",symbol:"₦",cuisine:"Nigerian"},
+  {name:"Norway",flag:"🇳🇴",currency:"NOK",symbol:"kr",cuisine:"Norwegian"},
+  {name:"Oman",flag:"🇴🇲",currency:"OMR",symbol:"OMR",cuisine:"Omani"},
+  {name:"Pakistan",flag:"🇵🇰",currency:"PKR",symbol:"₨",cuisine:"Pakistani"},
+  {name:"Panama",flag:"🇵🇦",currency:"USD",symbol:"$",cuisine:"Panamanian"},
+  {name:"Paraguay",flag:"🇵🇾",currency:"PYG",symbol:"₲",cuisine:"Paraguayan"},
+  {name:"Peru",flag:"🇵🇪",currency:"PEN",symbol:"S/",cuisine:"Peruvian"},
+  {name:"Philippines",flag:"🇵🇭",currency:"PHP",symbol:"₱",cuisine:"Filipino"},
+  {name:"Poland",flag:"🇵🇱",currency:"PLN",symbol:"zł",cuisine:"Polish"},
+  {name:"Portugal",flag:"🇵🇹",currency:"EUR",symbol:"€",cuisine:"Portuguese"},
+  {name:"Qatar",flag:"🇶🇦",currency:"QAR",symbol:"QR",cuisine:"Qatari"},
+  {name:"Romania",flag:"🇷🇴",currency:"RON",symbol:"lei",cuisine:"Romanian"},
+  {name:"Russia",flag:"🇷🇺",currency:"RUB",symbol:"₽",cuisine:"Russian"},
+  {name:"Saudi Arabia",flag:"🇸🇦",currency:"SAR",symbol:"SR",cuisine:"Saudi"},
+  {name:"Senegal",flag:"🇸🇳",currency:"XOF",symbol:"Fr",cuisine:"Senegalese"},
+  {name:"Serbia",flag:"🇷🇸",currency:"RSD",symbol:"din",cuisine:"Serbian"},
+  {name:"Singapore",flag:"🇸🇬",currency:"SGD",symbol:"S$",cuisine:"Singaporean"},
+  {name:"South Africa",flag:"🇿🇦",currency:"ZAR",symbol:"R",cuisine:"South African"},
+  {name:"South Korea",flag:"🇰🇷",currency:"KRW",symbol:"₩",cuisine:"Korean"},
+  {name:"Spain",flag:"🇪🇸",currency:"EUR",symbol:"€",cuisine:"Spanish"},
+  {name:"Sri Lanka",flag:"🇱🇰",currency:"LKR",symbol:"LKR",cuisine:"Sri Lankan"},
+  {name:"Sudan",flag:"🇸🇩",currency:"SDG",symbol:"ج.س",cuisine:"Sudanese"},
+  {name:"Sweden",flag:"🇸🇪",currency:"SEK",symbol:"kr",cuisine:"Swedish"},
+  {name:"Switzerland",flag:"🇨🇭",currency:"CHF",symbol:"Fr",cuisine:"Swiss"},
+  {name:"Syria",flag:"🇸🇾",currency:"SYP",symbol:"£",cuisine:"Syrian"},
+  {name:"Taiwan",flag:"🇹🇼",currency:"TWD",symbol:"NT$",cuisine:"Taiwanese"},
+  {name:"Tanzania",flag:"🇹🇿",currency:"TZS",symbol:"TSh",cuisine:"Tanzanian"},
+  {name:"Thailand",flag:"🇹🇭",currency:"THB",symbol:"฿",cuisine:"Thai"},
+  {name:"Tunisia",flag:"🇹🇳",currency:"TND",symbol:"DT",cuisine:"Tunisian"},
+  {name:"Turkey",flag:"🇹🇷",currency:"TRY",symbol:"₺",cuisine:"Turkish"},
+  {name:"Uganda",flag:"🇺🇬",currency:"UGX",symbol:"USh",cuisine:"Ugandan"},
+  {name:"Ukraine",flag:"🇺🇦",currency:"UAH",symbol:"₴",cuisine:"Ukrainian"},
+  {name:"United Arab Emirates",flag:"🇦🇪",currency:"AED",symbol:"AED",cuisine:"Emirati"},
+  {name:"United Kingdom",flag:"🇬🇧",currency:"GBP",symbol:"£",cuisine:"British"},
+  {name:"United States",flag:"🇺🇸",currency:"USD",symbol:"$",cuisine:"American"},
+  {name:"Uruguay",flag:"🇺🇾",currency:"UYU",symbol:"$U",cuisine:"Uruguayan"},
+  {name:"Uzbekistan",flag:"🇺🇿",currency:"UZS",symbol:"so'm",cuisine:"Uzbek"},
+  {name:"Venezuela",flag:"🇻🇪",currency:"VES",symbol:"Bs",cuisine:"Venezuelan"},
+  {name:"Vietnam",flag:"🇻🇳",currency:"VND",symbol:"₫",cuisine:"Vietnamese"},
+  {name:"Yemen",flag:"🇾🇪",currency:"YER",symbol:"﷼",cuisine:"Yemeni"},
+  {name:"Zimbabwe",flag:"🇿🇼",currency:"ZWL",symbol:"Z$",cuisine:"Zimbabwean"}
+];
+
+// Food plans by cuisine
+var FOOD_PLANS={
+  "Sri Lankan":[{e:"🥚",n:"Breakfast",d:"String hoppers + coconut sambol + dhal curry",b:180},{e:"🍛",n:"Lunch",d:"Rice + fish curry + spinach + papadam",b:350},{e:"🍌",n:"Snack",d:"King coconut + banana + pol pani",b:90},{e:"🍲",n:"Dinner",d:"Kiribath + lunu miris + jak fruit curry",b:280}],
+  "Indian":[{e:"🥣",n:"Breakfast",d:"Idli + sambar + coconut chutney",b:120},{e:"🍛",n:"Lunch",d:"Dal tadka + roti + sabzi + raita",b:200},{e:"🥜",n:"Snack",d:"Sprouts chaat + lemon water",b:60},{e:"🥘",n:"Dinner",d:"Khichdi + mixed veg + ghee",b:180}],
+  "Pakistani":[{e:"🥛",n:"Breakfast",d:"Paratha + egg + lassi + fruit",b:150},{e:"🍲",n:"Lunch",d:"Dal makhani + roti + salad",b:200},{e:"🍑",n:"Snack",d:"Fruit chaat + dates",b:80},{e:"🍖",n:"Dinner",d:"Chicken karahi + naan + raita",b:250}],
+  "Bangladeshi":[{e:"🍳",n:"Breakfast",d:"Ruti + egg curry + milk",b:120},{e:"🐟",n:"Lunch",d:"Rice + hilsa fish + dal + vegetables",b:180},{e:"🍌",n:"Snack",d:"Banana + puffed rice",b:50},{e:"🍛",n:"Dinner",d:"Khichuri + fried fish + pickle",b:200}],
+  "Chinese":[{e:"🥣",n:"Breakfast",d:"Congee + steamed egg + soy milk",b:30},{e:"🍜",n:"Lunch",d:"Noodle soup + tofu + bok choy",b:60},{e:"🫐",n:"Snack",d:"Walnuts + red dates + warm water",b:25},{e:"🥢",n:"Dinner",d:"Brown rice + steamed fish + broccoli",b:80}],
+  "Japanese":[{e:"🍱",n:"Breakfast",d:"Miso soup + rice + grilled salmon + pickles",b:600},{e:"🍣",n:"Lunch",d:"Sushi rice + cooked fish + miso",b:900},{e:"🍵",n:"Snack",d:"Edamame + green tea",b:300},{e:"🍜",n:"Dinner",d:"Udon soup + tofu + vegetables",b:800}],
+  "Korean":[{e:"🥣",n:"Breakfast",d:"Porridge (juk) + side dishes + seaweed soup",b:3000},{e:"🍚",n:"Lunch",d:"Bibimbap + doenjang jjigae",b:7000},{e:"🍎",n:"Snack",d:"Apple + walnuts + sikhye",b:2000},{e:"🥘",n:"Dinner",d:"Samgyetang + kimchi + rice",b:9000}],
+  "Thai":[{e:"🍚",n:"Breakfast",d:"Congee + soft-boiled egg + ginger",b:60},{e:"🍲",n:"Lunch",d:"Brown rice + green curry (mild) + tofu",b:120},{e:"🥭",n:"Snack",d:"Mango + sticky rice (small)",b:40},{e:"🍜",n:"Dinner",d:"Tom kha soup + jasmine rice + vegetables",b:100}],
+  "Vietnamese":[{e:"🍜",n:"Breakfast",d:"Pho with beef + fresh herbs + lime",b:45000},{e:"🥗",n:"Lunch",d:"Rice + steamed fish + morning glory",b:60000},{e:"🍊",n:"Snack",d:"Fresh fruit + unsalted nuts",b:20000},{e:"🍲",n:"Dinner",d:"Canh chua soup + rice",b:55000}],
+  "Filipino":[{e:"🍳",n:"Breakfast",d:"Arroz caldo + egg + ginger",b:80},{e:"🍚",n:"Lunch",d:"Rice + sinigang + grilled fish",b:150},{e:"🍌",n:"Snack",d:"Banana + camote + coconut water",b:40},{e:"🍲",n:"Dinner",d:"Tinola chicken soup + rice",b:130}],
+  "Indonesian":[{e:"🍳",n:"Breakfast",d:"Rice porridge (bubur) + egg + tempeh",b:15000},{e:"🍛",n:"Lunch",d:"Nasi goreng (mild) + veggies + tofu",b:25000},{e:"🥤",n:"Snack",d:"Young coconut + banana",b:8000},{e:"🍲",n:"Dinner",d:"Soto soup + rice + boiled egg",b:20000}],
+  "Malaysian":[{e:"🍚",n:"Breakfast",d:"Nasi lemak (no spice) + egg + cucumber",b:5},{e:"🥘",n:"Lunch",d:"Chicken congee + steamed veg",b:9},{e:"🥜",n:"Snack",d:"Soya bean drink + kuih",b:3},{e:"🍲",n:"Dinner",d:"Clear soup + fish + rice",b:10}],
+  "American":[{e:"🥞",n:"Breakfast",d:"Whole wheat pancakes + eggs + OJ",b:8},{e:"🥗",n:"Lunch",d:"Grilled chicken salad + whole grain bread",b:12},{e:"🥜",n:"Snack",d:"Greek yogurt + berries + almonds",b:5},{e:"🍝",n:"Dinner",d:"Baked salmon + sweet potato + broccoli",b:15}],
+  "British":[{e:"🍳",n:"Breakfast",d:"Porridge + scrambled eggs + orange juice",b:4},{e:"🥗",n:"Lunch",d:"Jacket potato + tuna + salad",b:7},{e:"🍎",n:"Snack",d:"Apple + whole grain crackers + cheese",b:3},{e:"🍗",n:"Dinner",d:"Roast chicken + veg + mashed potato",b:10}],
+  "French":[{e:"🥐",n:"Breakfast",d:"Whole grain bread + cheese + fruit + milk",b:5},{e:"🥗",n:"Lunch",d:"Lentil soup + salad + baguette",b:10},{e:"🧀",n:"Snack",d:"Yogurt + walnuts + honey",b:3},{e:"🐟",n:"Dinner",d:"Grilled fish + ratatouille + rice",b:14}],
+  "Italian":[{e:"🥛",n:"Breakfast",d:"Whole grain bread + ricotta + cappuccino",b:4},{e:"🍝",n:"Lunch",d:"Pasta e fagioli + salad",b:8},{e:"🍇",n:"Snack",d:"Fruit + parmigiano + nuts",b:4},{e:"🐟",n:"Dinner",d:"Grilled sea bass + roasted vegetables",b:13}],
+  "German":[{e:"🥛",n:"Breakfast",d:"Muesli + yogurt + whole grain bread + egg",b:4},{e:"🍲",n:"Lunch",d:"Lentil soup + rye bread + salad",b:9},{e:"🧀",n:"Snack",d:"Quark + fruit + nuts",b:3},{e:"🥔",n:"Dinner",d:"Baked potato + quark + vegetables",b:8}],
+  "Spanish":[{e:"🥣",n:"Breakfast",d:"Toast + olive oil + tomato + OJ",b:4},{e:"🥘",n:"Lunch",d:"Paella de verduras + salad + bread",b:9},{e:"🍊",n:"Snack",d:"Fresh fruit + almonds",b:3},{e:"🐟",n:"Dinner",d:"Grilled fish + chickpea salad",b:11}],
+  "Greek":[{e:"🥚",n:"Breakfast",d:"Greek yogurt + honey + walnuts + egg",b:4},{e:"🥗",n:"Lunch",d:"Horiatiki salad + lentils + pita",b:7},{e:"🫒",n:"Snack",d:"Olives + feta + fruit",b:3},{e:"🐟",n:"Dinner",d:"Baked fish + roasted veg + rice",b:11}],
+  "Turkish":[{e:"🧀",n:"Breakfast",d:"Eggs + cheese + olives + tomato + tea",b:60},{e:"🥗",n:"Lunch",d:"Lentil soup + bulgur pilaf + salad",b:100},{e:"🍎",n:"Snack",d:"Fruit + ayran + nuts",b:30},{e:"🍖",n:"Dinner",d:"Grilled chicken + vegetables + rice",b:120}],
+  "Lebanese":[{e:"🫓",n:"Breakfast",d:"Labneh + olives + pita + za'atar",b:8},{e:"🥗",n:"Lunch",d:"Fattoush + hummus + falafel",b:15},{e:"🍎",n:"Snack",d:"Fruit + pine nuts",b:5},{e:"🍖",n:"Dinner",d:"Chicken shawarma (grilled) + tabbouleh",b:18}],
+  "Egyptian":[{e:"🫘",n:"Breakfast",d:"Ful medames + egg + bread",b:25},{e:"🍲",n:"Lunch",d:"Koshari + salad",b:40},{e:"🍊",n:"Snack",d:"Seasonal fruit + nuts",b:15},{e:"🥘",n:"Dinner",d:"Molokhia soup + rice + grilled chicken",b:50}],
+  "Saudi":[{e:"🍳",n:"Breakfast",d:"Dates + eggs + bread + milk",b:15},{e:"🍖",n:"Lunch",d:"Kabsa rice + chicken + salad",b:30},{e:"🥛",n:"Snack",d:"Laban + dates + fruit",b:10},{e:"🥘",n:"Dinner",d:"Harees + vegetables",b:25}],
+  "Emirati":[{e:"🍳",n:"Breakfast",d:"Balaleet + eggs + dates + karak chai",b:12},{e:"🍖",n:"Lunch",d:"Machboos + salad + laban",b:28},{e:"🥛",n:"Snack",d:"Dates + camel milk + fruit",b:10},{e:"🥘",n:"Dinner",d:"Harees + chicken stew",b:25}],
+  "Nigerian":[{e:"🌾",n:"Breakfast",d:"Akara + pap + fruit",b:800},{e:"🍲",n:"Lunch",d:"Jollof rice + fish + vegetables",b:1500},{e:"🍌",n:"Snack",d:"Banana + groundnuts + water",b:400},{e:"🥘",n:"Dinner",d:"Egusi soup + eba + vegetables",b:1200}],
+  "Ethiopian":[{e:"🥚",n:"Breakfast",d:"Injera + tikel gomen + boiled egg",b:80},{e:"🍲",n:"Lunch",d:"Lentil stew + injera + salad",b:150},{e:"🍌",n:"Snack",d:"Banana + roasted chickpeas",b:40},{e:"🥘",n:"Dinner",d:"Doro wat (mild) + injera",b:120}],
+  "Mexican":[{e:"🥚",n:"Breakfast",d:"Huevos rancheros + avocado + OJ",b:80},{e:"🌮",n:"Lunch",d:"Bean tacos + salad + agua fresca",b:120},{e:"🥑",n:"Snack",d:"Guacamole + corn tortilla + fruit",b:50},{e:"🍲",n:"Dinner",d:"Caldo de pollo + rice + tortilla",b:100}],
+  "Brazilian":[{e:"🍳",n:"Breakfast",d:"Tapioca + cheese + fruit + coffee with milk",b:12},{e:"🍚",n:"Lunch",d:"Rice + beans + grilled chicken + salad",b:25},{e:"🍊",n:"Snack",d:"Acai + granola + banana",b:10},{e:"🥘",n:"Dinner",d:"Fish moqueca + rice + vegetables",b:30}],
+  "Peruvian":[{e:"🥣",n:"Breakfast",d:"Quinoa porridge + egg + fruit",b:8},{e:"🐟",n:"Lunch",d:"Sopa de quinoa + grilled fish",b:18},{e:"🥭",n:"Snack",d:"Lucuma + banana + nuts",b:6},{e:"🍲",n:"Dinner",d:"Seco de pollo + rice",b:20}],
+  "Russian":[{e:"🥣",n:"Breakfast",d:"Kasha + boiled egg + black bread",b:120},{e:"🍲",n:"Lunch",d:"Borscht + rye bread + salad",b:200},{e:"🥛",n:"Snack",d:"Kefir + apple",b:60},{e:"🥘",n:"Dinner",d:"Baked fish + potatoes + vegetables",b:250}],
+  "Australian":[{e:"🥣",n:"Breakfast",d:"Vegemite toast + eggs + OJ",b:6},{e:"🥗",n:"Lunch",d:"Grain salad + grilled chicken + avocado",b:14},{e:"🍎",n:"Snack",d:"Fruit + yogurt + nuts",b:5},{e:"🐟",n:"Dinner",d:"Barramundi + sweet potato + veg",b:18}],
+  "default":[{e:"🥚",n:"Breakfast",d:"Eggs + whole grain bread + fruit + milk",b:null},{e:"🥗",n:"Lunch",d:"Balanced meal with protein + vegetables + carbs",b:null},{e:"🍎",n:"Snack",d:"Fresh fruit + nuts + yogurt",b:null},{e:"🍲",n:"Dinner",d:"Lean protein + vegetables + whole grain",b:null}]
+};
+
+var ud={};
+var selectedCountry=null;
+var PERSONAS=["Intuitive Nurturer","Grounded Planner","Radiant Free Spirit","Mindful Warrior","Gentle Explorer","Serene Mama"];
+var QUIZ=[
+  {q:"When you feel overwhelmed, what helps you most?",opts:[{i:"📖",t:"Reading or journaling quietly"},{i:"🤝",t:"Talking to someone I trust"},{i:"🎵",t:"Music, movement, or creativity"},{i:"🌿",t:"Being in nature or meditating"}]},
+  {q:"How do you prefer to receive guidance?",opts:[{i:"📋",t:"Step-by-step lists and schedules"},{i:"💬",t:"Friendly, conversational advice"},{i:"🎯",t:"Short, direct key points only"},{i:"✨",t:"Inspirational and encouraging words"}]},
+  {q:"What matters most to you right now?",opts:[{i:"🍎",t:"Eating perfectly for my baby"},{i:"💪",t:"Staying strong and active"},{i:"😌",t:"Staying calm and stress-free"},{i:"💰",t:"Managing costs wisely"}]},
+  {q:"How would your close friends describe you?",opts:[{i:"🦋",t:"Creative and expressive"},{i:"🌻",t:"Warm and nurturing to everyone"},{i:"🔬",t:"Analytical and detail-oriented"},{i:"⚡",t:"Energetic and spontaneous"}]},
+  {q:"When you imagine holding your baby, you feel…",opts:[{i:"😭",t:"Completely overwhelmed with love"},{i:"🤩",t:"Excited and ready for adventure"},{i:"🙏",t:"Deeply grateful and peaceful"},{i:"💭",t:"Wondering about the future"}]},
+  {q:"What kind of pregnancy experience do you want?",opts:[{i:"🌸",t:"Gentle, natural and mindful"},{i:"🏥",t:"Medically informed and safe"},{i:"🎉",t:"Joyful, social and celebrated"},{i:"🧘",t:"Balanced, structured and calm"}]}
+];
+var qIdx=0,qAnswers=[];
+
+// Country modal
+function renderCountryList(filter){
+  var list=document.getElementById('country-list');
+  var filtered=filter?COUNTRIES.filter(function(c){return c.name.toLowerCase().indexOf(filter.toLowerCase())>=0;}):COUNTRIES;
+  list.innerHTML=filtered.map(function(c){
+    var sel=selectedCountry&&selectedCountry.name===c.name?' selected':'';
+    return '<div class="country-item'+sel+'" data-name="'+c.name+'"><span class="country-flag">'+c.flag+'</span><span class="country-name">'+c.name+'</span><span class="country-currency">'+c.currency+' '+c.symbol+'</span></div>';
+  }).join('');
+  list.querySelectorAll('.country-item').forEach(function(el){
+    el.addEventListener('click',function(){
+      var name=this.getAttribute('data-name');
+      selectedCountry=COUNTRIES.find(function(c){return c.name===name;});
+      document.getElementById('country-btn-text').textContent=selectedCountry.flag+' '+selectedCountry.name;
+      document.getElementById('currency-hint').textContent='Currency: '+selectedCountry.currency+' ('+selectedCountry.symbol+')';
+      closeCountryModal();
+    });
+  });
+}
+function openCountryModal(){
+  document.getElementById('country-modal-overlay').classList.remove('hidden');
+  document.getElementById('country-search').value='';
+  renderCountryList('');
+  setTimeout(function(){document.getElementById('country-search').focus();},200);
+}
+function closeCountryModal(){document.getElementById('country-modal-overlay').classList.add('hidden');}
+
+document.getElementById('country-btn').addEventListener('click',openCountryModal);
+document.getElementById('country-modal-overlay').addEventListener('click',function(e){if(e.target===this)closeCountryModal();});
+document.getElementById('country-search').addEventListener('input',function(){renderCountryList(this.value);});
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  var main=['home','chat-screen','reports-screen','profile-screen'];
+  document.getElementById('bottom-nav').classList.toggle('hidden',main.indexOf(id)<0);
+  window.scrollTo(0,0);
+}
+
+function collectSignup(){
+  ud.name=document.getElementById('inp-name').value||'Mama';
+  ud.age=document.getElementById('inp-age').value||'28';
+  ud.blood=document.getElementById('inp-blood').value||'O+';
+  ud.height=document.getElementById('inp-height').value||'160';
+  ud.weight=document.getElementById('inp-weight').value||'65';
+  ud.preweight=document.getElementById('inp-preweight').value||'58';
+  ud.weeks=document.getElementById('inp-weeks').value||'20';
+  ud.conditions=document.getElementById('inp-conditions').value||'None';
+  ud.food=document.getElementById('inp-food').value||'3000';
+  ud.med=document.getElementById('inp-med').value||'5000';
+  ud.reminder=document.getElementById('inp-reminder').value||'Monthly';
+  ud.country=selectedCountry||{name:'Sri Lanka',flag:'🇱🇰',currency:'LKR',symbol:'LKR',cuisine:'Sri Lankan'};
+}
+
+function getFoodPlan(cuisine){
+  return FOOD_PLANS[cuisine]||FOOD_PLANS['default'];
+}
+
+function renderFoodCards(){
+  var c=ud.country||{cuisine:'Sri Lankan',symbol:'LKR'};
+  var plan=getFoodPlan(c.cuisine);
+  var sym=c.symbol;
+  var scroll=document.getElementById('food-scroll');
+  scroll.innerHTML=plan.map(function(m){
+    var budgetStr=m.b!==null?(sym+' '+m.b.toLocaleString()):'';
+    return '<div class="food-card"><div class="food-emoji">'+m.e+'</div><div class="food-name">'+m.n+'</div><div class="food-detail">'+m.d+'</div>'+(budgetStr?'<div class="food-budget">~'+budgetStr+'</div>':'')+'</div>';
+  }).join('');
+  document.getElementById('d-cuisine-tag').textContent=c.cuisine+' cuisine';
+}
+
+function buildDash(){
+  var h=parseFloat(ud.height)||160;
+  var w=parseFloat(ud.weight)||65;
+  var pw=parseFloat(ud.preweight)||58;
+  var bmi=(w/Math.pow(h/100,2)).toFixed(1);
+  var gain=(w-pw).toFixed(1);
+  var bmiS=bmi<18.5?'Underweight ⚠️':bmi<25?'Normal ✓':bmi<30?'Overweight ⚠️':'Obese ⚠️';
+  var c=ud.country||{name:'Sri Lanka',flag:'🇱🇰',currency:'LKR',symbol:'LKR',cuisine:'Sri Lankan'};
+  document.getElementById('d-name').textContent=ud.name||'Mama';
+  document.getElementById('d-week').textContent=ud.weeks||'20';
+  document.getElementById('d-bmi').textContent=bmi;
+  document.getElementById('d-bmi-s').textContent=bmiS;
+  document.getElementById('d-gain').textContent=gain+' kg';
+  document.getElementById('d-budget').textContent=parseInt(ud.food||3000).toLocaleString();
+  document.getElementById('d-budget-lbl').textContent=c.currency+'/week';
+  document.getElementById('d-reminder').textContent=(ud.reminder||'Monthly')+' reminder set';
+  renderFoodCards();
+  // Profile
+  document.getElementById('p-name').textContent=ud.name||'Mama';
+  document.getElementById('p-week').textContent='Week '+(ud.weeks||20)+' · 2nd Trimester';
+  document.getElementById('p-persona').textContent='✨ '+(ud.persona||'Nurturing Soul');
+  document.getElementById('p-country').textContent=c.flag+' '+c.name+' ('+c.currency+')';
+  document.getElementById('p-height').textContent=(ud.height||160)+' cm';
+  document.getElementById('p-weight').textContent=(ud.weight||65)+' kg';
+  document.getElementById('p-preweight').textContent=(ud.preweight||58)+' kg';
+  document.getElementById('p-bmi').textContent=bmi+' — '+(bmi<25?'Normal':'Consult doctor');
+  document.getElementById('p-blood').textContent=ud.blood||'O+';
+  document.getElementById('p-reminder').textContent=ud.reminder||'Monthly';
+  document.getElementById('p-food').textContent=c.symbol+' '+parseInt(ud.food||3000).toLocaleString();
+  document.getElementById('p-med').textContent=c.symbol+' '+parseInt(ud.med||5000).toLocaleString();
+}
+
+function renderQuiz(){
+  var pct=(qIdx/QUIZ.length)*100;
+  document.getElementById('quiz-bar').style.width=pct+'%';
+  var q=QUIZ[qIdx];
+  var html='<div class="quiz-q-num fade-in">Question '+(qIdx+1)+' of '+QUIZ.length+'</div>';
+  html+='<div class="quiz-question fade-in">'+q.q+'</div>';
+  html+='<div class="quiz-options fade-in">';
+  q.opts.forEach(function(o,i){html+='<div class="quiz-option" data-idx="'+i+'"><span class="quiz-option-icon">'+o.i+'</span><span class="quiz-option-text">'+o.t+'</span></div>';});
+  html+='</div><div class="quiz-nav"><button class="btn-ghost" id="q-back-btn">'+(qIdx>0?'← Back':'')+'</button><span style="font-size:12px;color:var(--text-hint)">'+(qIdx+1)+' / '+QUIZ.length+'</span><span></span></div>';
+  document.getElementById('quiz-body').innerHTML=html;
+  document.querySelectorAll('.quiz-option').forEach(function(el){
+    el.addEventListener('click',function(){
+      document.querySelectorAll('.quiz-option').forEach(function(x){x.classList.remove('selected');});
+      this.classList.add('selected');
+      qAnswers[qIdx]=parseInt(this.getAttribute('data-idx'));
+      setTimeout(function(){if(qIdx<QUIZ.length-1){qIdx++;renderQuiz();}else{finishQuiz();}},320);
+    });
+  });
+  var qb=document.getElementById('q-back-btn');
+  if(qb)qb.addEventListener('click',function(){if(qIdx>0){qIdx--;renderQuiz();}});
+}
+
+function finishQuiz(){
+  var sum=qAnswers.reduce(function(a,b){return a+b;},0);
+  ud.persona=PERSONAS[sum%PERSONAS.length];
+  try{localStorage.setItem('pogData',JSON.stringify(ud));}catch(e){}
+  buildDash();show('home');
+}
+
+function addMsg(text,who){
+  var div=document.createElement('div');
+  div.className='msg msg-'+who+' fade-in';
+  div.textContent=text;
+  var msgs=document.getElementById('chat-msgs');
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return div;
+}
+function addTyping(){
+  var div=document.createElement('div');
+  div.className='msg msg-ai';
+  div.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';
+  var msgs=document.getElementById('chat-msgs');
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return div;
+}
+async function sendChat(text){
+  if(!text){var inp=document.getElementById('chat-inp');text=inp.value.trim();if(!text)return;inp.value='';}
+  addMsg(text,'user');
+  var typing=addTyping();
+  var c=ud.country||{name:'Sri Lanka',currency:'LKR',cuisine:'Sri Lankan'};
+  var sys='You are Blossom, a warm caring AI pregnancy companion. User: '+(ud.name||'Mama')+', '+(ud.weeks||20)+' weeks pregnant, weight '+(ud.weight||65)+'kg, height '+(ud.height||160)+'cm, conditions: '+(ud.conditions||'none')+', country: '+c.name+', food budget: '+c.currency+' '+(ud.food||3000)+' weekly, cuisine preference: '+c.cuisine+', personality: '+(ud.persona||'Nurturing Soul')+'. Give warm personalised supportive answers about pregnancy and women\'s health. Under 100 words. Use 1-2 emojis.';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,system:sys,messages:[{role:'user',content:text}]})});
+    var data=await res.json();
+    typing.remove();
+    addMsg((data.content&&data.content[0]&&data.content[0].text)||"I'm here for you, mama! 💕",'ai');
+  }catch(e){typing.remove();addMsg("I'm always here for you! Try again in a moment. 💕",'ai');}
+}
+
+function navTo(s,n){
+  document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
+  document.getElementById(n).classList.add('active');
+  document.querySelectorAll('.screen').forEach(function(x){x.classList.remove('active');});
+  document.getElementById(s).classList.add('active');
+}
+
+document.getElementById('btn-signup').addEventListener('click',function(){show('signup');});
+document.getElementById('btn-signin').addEventListener('click',function(){
+  try{var s=localStorage.getItem('pogData');if(s){ud=JSON.parse(s);selectedCountry=ud.country||null;}else throw 0;}
+  catch(e){ud={name:'Sarah',age:'28',blood:'O+',height:'160',weight:'65',preweight:'58',weeks:'20',conditions:'None',food:'3000',med:'5000',reminder:'Monthly',country:{name:'Sri Lanka',flag:'🇱🇰',currency:'LKR',symbol:'LKR',cuisine:'Sri Lankan'},persona:'Nurturing Soul'};}
+  buildDash();show('home');
+});
+document.getElementById('signup-back').addEventListener('click',function(){show('splash');});
+document.getElementById('btn-to-quiz').addEventListener('click',function(){collectSignup();qIdx=0;qAnswers=[];renderQuiz();show('quiz');});
+document.getElementById('quiz-back').addEventListener('click',function(){show('signup');});
+document.getElementById('nav-home').addEventListener('click',function(){navTo('home','nav-home');});
+document.getElementById('nav-chat').addEventListener('click',function(){navTo('chat-screen','nav-chat');});
+document.getElementById('nav-reports').addEventListener('click',function(){navTo('reports-screen','nav-reports');});
+document.getElementById('nav-profile').addEventListener('click',function(){navTo('profile-screen','nav-profile');});
+document.getElementById('send-btn').addEventListener('click',function(){sendChat();});
+document.getElementById('chat-inp').addEventListener('keydown',function(e){if(e.key==='Enter')sendChat();});
+document.getElementById('chip1').addEventListener('click',function(){sendChat('What foods should I avoid this week?');});
+document.getElementById('chip2').addEventListener('click',function(){sendChat('I have lower back pain. What should I do?');});
+document.getElementById('chip3').addEventListener('click',function(){sendChat('Am I gaining the right amount of weight?');});
+document.getElementById('chip4').addEventListener('click',function(){sendChat('What symptoms are normal in my week?');});
+document.getElementById('upload-zone').addEventListener('click',function(){
+  var list=document.getElementById('report-list');
+  var item=document.createElement('div');
+  item.className='report-item fade-in';
+  item.innerHTML='<div class="report-icon">📊</div><div class="report-info"><div class="report-name">New Report Uploaded</div><div class="report-date">Just now</div></div><div class="report-status rs-pend">Analyzing…</div>';
+  list.insertBefore(item,list.firstChild);
+  setTimeout(function(){item.querySelector('.report-status').className='report-status rs-ok';item.querySelector('.report-status').textContent='Analyzed ✓';},2500);
+});
+try{var s=localStorage.getItem('pogData');if(s){ud=JSON.parse(s);selectedCountry=ud.country||null;}}catch(e){}
+</script>
